@@ -44,3 +44,35 @@ export interface RPMInput {
   graduateDimensions: GraduateDimension[];
   integrationOption: IntegrationOption;
 }
+
+export interface UserProfile {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  role: 'admin' | 'user';
+  createdAt?: string;
+  lastLoginAt?: string;
+}
+
+export interface GeminiApiKey {
+  id: string;
+  key: string;
+  label: string;
+  status: 'active' | 'disabled' | 'exhausted';
+  createdBy: string;
+  createdAt: string;
+  errorCount: number;
+  lastUsedAt?: string;
+}
+
+export interface RpmHistoryItem {
+  id: string;
+  userId: string;
+  teacherName: string;
+  subject: string;
+  className: string;
+  subjectMatter: string;
+  createdAt: string;
+  htmlContent: string;
+}

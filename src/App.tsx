@@ -1,12 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { RPMForm } from './components/RPMForm';
 import { RPMOutput } from './components/RPMOutput';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import type { RPMInput } from './types';
+import { LoginScreen } from './components/LoginScreen';
+import { AdminDashboardModal } from './components/AdminDashboardModal';
+import { HistoryModal } from './components/HistoryModal';
+import type { RPMInput, UserProfile } from './types';
 import { generateRPM, MISSING_API_KEY_ERROR } from './services/geminiService';
 import { Notification } from './components/Notification';
+import { auth, onAuthStateChanged, syncUserProfile } from './lib/firebase';
+import { saveRpmHistory } from './services/apiKeyService';
 
 const loadingMessages = [
   'Menganalisis tujuan pembelajaran...',
@@ -67,8 +72,10 @@ const ServerBusyDisplay = () => (
     </div>
 );
 
-
 const App: React.FC = () => {
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isAuthChecking, setIsAuthChecking] = useState<boolean>(true);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [generatedRpm, setGeneratedRpm] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -79,6 +86,36 @@ const App: React.FC = () => {
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [colorIndex, setColorIndex] = useState<number>(0);
   const [isServerBusy, setIsServerBusy] = useState<boolean>(false);
+
+  // Modals state
+  const [isAdminDashboardOpen, setIsAdminDashboardOpen] = useState<boolean>(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState<boolean>(false);
+
+  // Listen to Auth State
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const profile = await syncUserProfile(currentUser);
+          setUser(profile);
+        } catch (err) {
+          console.error("Gagal menyinkronkan profil user:", err);
+          setUser({
+            uid: currentUser.uid,
+            email: currentUser.email || '',
+            displayName: currentUser.displayName || 'Pengguna',
+            photoURL: currentUser.photoURL || undefined,
+            role: currentUser.email === 'rinomasstbi@gmail.com' ? 'admin' : 'user'
+          });
+        }
+      } else {
+        setUser(null);
+      }
+      setIsAuthChecking(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleFormSubmit = useCallback(async (data: RPMInput) => {
     setView('output');
@@ -91,28 +128,40 @@ const App: React.FC = () => {
     setCurrentLoadingMessage(loadingMessages[0]);
     setColorIndex(0);
 
+    let fullOutput = '';
+
     try {
       const stream = await generateRPM(data);
       let chunkCount = 0;
-      // Change message every N chunks to show progress through stages
       const messageChangeChunkInterval = 10; 
       
-      // Give an initial small progress bump to show instant feedback
       setTimeout(() => setLoadingProgress(5), 100);
 
       for await (const chunk of stream) {
-        setGeneratedRpm(prev => prev + chunk.text);
+        const textChunk = chunk.text || '';
+        fullOutput += textChunk;
+        setGeneratedRpm(prev => prev + textChunk);
         
-        // Update progress with a non-linear curve for a more natural feel
-        // It moves faster at the start and slows down as it approaches 95%
         setLoadingProgress(prev => Math.min(95, prev + (95 - prev) * 0.05));
 
         chunkCount++;
-        // Update loading message and color based on the number of chunks processed
         const nextMessageIndex = Math.min(loadingMessages.length - 1, Math.floor(chunkCount / messageChangeChunkInterval));
         setCurrentLoadingMessage(loadingMessages[nextMessageIndex]);
         setColorIndex(nextMessageIndex);
       }
+
+      // Automatically save to history if generation completed and user logged in
+      if (user && fullOutput.trim() !== '') {
+        saveRpmHistory(
+          user.uid,
+          data.teacherName,
+          data.subject,
+          data.className,
+          data.subjectMatter,
+          fullOutput
+        );
+      }
+
     } catch (e: any) {
       console.error(e);
       
@@ -121,7 +170,7 @@ const App: React.FC = () => {
         if (e.message === MISSING_API_KEY_ERROR) {
             setIsConfigError(true);
             errorMessage = e.message;
-        } else if (e.message.includes('503') || e.message.includes('UNAVAILABLE') || (typeof e.message === 'string' && e.message.includes('high demand'))) {
+        } else if (e.message === 'SERVER_BUSY' || e.message.includes('503') || e.message.includes('UNAVAILABLE') || (typeof e.message === 'string' && e.message.includes('high demand'))) {
             setIsServerBusy(true);
             errorMessage = 'Server Google AI (Gemini) saat ini sedang sangat sibuk.';
         } else {
@@ -135,15 +184,40 @@ const App: React.FC = () => {
         setIsLoading(false);
       }, 500);
     }
-  }, []);
+  }, [user]);
 
   const handleBackToForm = useCallback(() => {
     setView('form');
   }, []);
 
+  const handleSelectHistoryItem = useCallback((htmlContent: string) => {
+    setGeneratedRpm(htmlContent);
+    setView('output');
+  }, []);
+
+  // Show Auth Loading Screen
+  if (isAuthChecking) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 text-white">
+        <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-slate-300 font-medium text-sm">Memeriksa autentikasi...</p>
+      </div>
+    );
+  }
+
+  // Show Login Screen if not logged in
+  if (!user) {
+    return <LoginScreen />;
+  }
+
   return (
     <div className="min-h-screen text-slate-800 font-sans">
-      <Header />
+      <Header 
+        user={user}
+        onOpenAdminDashboard={() => setIsAdminDashboardOpen(true)}
+        onOpenHistory={() => setIsHistoryOpen(true)}
+      />
+
       <main className="container mx-auto p-4 md:p-8 lg:p-12">
         {view === 'form' ? (
           <div className="bg-white p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-200/50 no-print">
@@ -190,10 +264,25 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
+
       <Footer />
-      {showNotification && (
-        <Notification onClose={() => setShowNotification(false)} />
+
+      {/* Admin Dashboard Modal */}
+      {user.role === 'admin' && (
+        <AdminDashboardModal 
+          isOpen={isAdminDashboardOpen}
+          onClose={() => setIsAdminDashboardOpen(false)}
+          userEmail={user.email}
+        />
       )}
+
+      {/* History Modal */}
+      <HistoryModal 
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        userId={user.uid}
+        onSelectHistoryItem={handleSelectHistoryItem}
+      />
     </div>
   );
 };

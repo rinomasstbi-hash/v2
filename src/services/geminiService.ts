@@ -1,5 +1,6 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { RPMInput, IntegrationOption } from '../types';
+import { fetchActiveApiKeys, reportApiKeyError } from './apiKeyService';
 
 const SYSTEM_INSTRUCTION = `Anda adalah asisten ahli dalam pembuatan Rencana Pembelajaran Mendalam (RPM) untuk kurikulum madrasah di Indonesia, khususnya untuk MTsN 4 Jombang. Tugas Anda adalah membuat dokumen RPM yang lengkap, terstruktur, dan siap pakai dalam format HTML. Ikuti struktur dan instruksi di bawah ini dengan SANGAT TELITI menggunakan Ejaan Bahasa Indonesia yang baik dan benar. Pastikan semua teks berwarna hitam atau sangat gelap agar kontrasnya tinggi dan mudah dibaca. Jangan gunakan sintaks Markdown seperti **teks tebal** di dalam output HTML Anda; sebagai gantinya, gunakan tag HTML yang sesuai seperti \`<b>\` atau \`<strong>\`.
 
@@ -280,34 +281,72 @@ function createPrompt(data: RPMInput): string {
     `;
 }
 
-export const MISSING_API_KEY_ERROR = "Kunci API Gemini tidak ditemukan. Harap konfigurasikan variabel lingkungan `API_KEY` di pengaturan deployment Anda (misalnya, di Netlify: Site settings > Build & deploy > Environment).";
+export const MISSING_API_KEY_ERROR = "Tidak ada Kunci API Gemini yang aktif. Admin perlu menambahkan API Key ke dalam Pool pada Admin Dashboard.";
 
 export const generateRPM = async (data: RPMInput): Promise<AsyncGenerator<GenerateContentResponse>> => {
-  const apiKey = process.env.API_KEY;
+  // 1. Fetch active keys from Firestore Pool
+  const poolKeys = await fetchActiveApiKeys();
 
-  if (!apiKey || apiKey.trim() === '') {
+  // Prepare list of key objects to try
+  const keyList: Array<{ id?: string; key: string; label: string }> = [];
+
+  if (poolKeys.length > 0) {
+    // Shuffle pool keys to distribute load evenly
+    const shuffled = [...poolKeys].sort(() => Math.random() - 0.5);
+    shuffled.forEach(k => keyList.push({ id: k.id, key: k.key, label: k.label }));
+  }
+
+  // Fallback to environment variable if set
+  const envKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+  if (envKey && envKey.trim() !== '') {
+    keyList.push({ key: envKey.trim(), label: 'Default System Key' });
+  }
+
+  if (keyList.length === 0) {
     throw new Error(MISSING_API_KEY_ERROR);
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-    const model = 'gemini-2.5-flash';
-    const prompt = createPrompt(data);
+  const prompt = createPrompt(data);
+  let lastError: any = null;
 
-    const response = await ai.models.generateContentStream({
-      model: model,
-      contents: prompt,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
+  // Try keys in pool one by one
+  for (let i = 0; i < keyList.length; i++) {
+    const currentKeyObj = keyList[i];
+    try {
+      console.log(`Menggunakan API Key: ${currentKeyObj.label} (Attempt ${i + 1}/${keyList.length})`);
+      const ai = new GoogleGenAI({ apiKey: currentKeyObj.key });
+      const model = 'gemini-2.5-flash';
+
+      const response = await ai.models.generateContentStream({
+        model: model,
+        contents: prompt,
+        config: {
+          systemInstruction: SYSTEM_INSTRUCTION,
+        }
+      });
+
+      return response;
+    } catch (error: any) {
+      console.warn(`Gagal menggunakan key (${currentKeyObj.label}):`, error);
+      lastError = error;
+
+      // Report error to Firestore if it has a pool ID
+      if (currentKeyObj.id) {
+        await reportApiKeyError(currentKeyObj.id);
       }
-    });
 
-    return response;
-  } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    if (error instanceof Error) {
-        throw new Error(`Terjadi masalah saat berkomunikasi dengan layanan AI. Pastikan kunci API Anda valid. (Detail: ${error.message})`);
+      // If there are more keys to try, continue loop!
     }
-    throw new Error("Gagal berkomunikasi dengan layanan AI. Terjadi kesalahan yang tidak diketahui.");
   }
+
+  // If all keys failed
+  console.error("Semua API Key dalam pool gagal merespon:", lastError);
+  if (lastError instanceof Error) {
+    if (lastError.message.includes('503') || lastError.message.includes('UNAVAILABLE') || lastError.message.includes('high demand')) {
+      throw new Error("SERVER_BUSY");
+    }
+    throw new Error(`Terjadi masalah saat berkomunikasi dengan layanan AI: ${lastError.message}`);
+  }
+
+  throw new Error("Gagal berkomunikasi dengan layanan AI. Terjadi kesalahan yang tidak diketahui.");
 };

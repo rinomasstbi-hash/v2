@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profiles and roles",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "photoURL": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "admin",
+            "user"
+          ]
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "email"
+      ]
+    },
+    "gemini_api_keys": {
+      "title": "Gemini API Key Pool",
+      "description": "Pool of Gemini API keys managed by Admin",
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "disabled",
+            "exhausted"
+          ]
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "errorCount": {
+          "type": "number"
+        },
+        "lastUsedAt": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "status"
+      ]
+    },
+    "rpm_history": {
+      "title": "RPM History",
+      "description": "History of generated RPM documents by users",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "teacherName": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "htmlContent": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "userId",
+        "createdAt"
+      ]
+    }
+  }
+}
