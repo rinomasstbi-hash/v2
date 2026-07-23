@@ -1,0 +1,5 @@
+{
+  "name": "rpm-kbc-sra",
+  "description": "An application to generate Detailed Learning Plans (RPM) for all subjects at MTsN 4 Jombang, integrating the KBC-SRA-TKA.",
+  "requestFramePermissions": []
+}
