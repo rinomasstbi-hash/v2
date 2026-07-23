@@ -42,36 +42,39 @@ export const logoutUser = async () => {
 };
 
 export const syncUserProfile = async (user: User): Promise<UserProfile> => {
-  const userRef = doc(db, 'users', user.uid);
-  const userSnap = await getDoc(userRef);
-
   const isAdmin = user.email === ADMIN_EMAIL;
   const now = new Date().toISOString();
 
-  let profile: UserProfile;
+  let profile: UserProfile = {
+    uid: user.uid,
+    email: user.email || '',
+    displayName: user.displayName || user.email || 'Pengguna',
+    photoURL: user.photoURL || undefined,
+    role: isAdmin ? 'admin' : 'user',
+    createdAt: now,
+    lastLoginAt: now
+  };
 
-  if (userSnap.exists()) {
-    const existing = userSnap.data() as UserProfile;
-    profile = {
-      ...existing,
-      email: user.email || '',
-      displayName: user.displayName || user.email || 'Pengguna',
-      photoURL: user.photoURL || undefined,
-      role: isAdmin ? 'admin' : (existing.role || 'user'),
-      lastLoginAt: now
-    };
-    await setDoc(userRef, profile, { merge: true });
-  } else {
-    profile = {
-      uid: user.uid,
-      email: user.email || '',
-      displayName: user.displayName || user.email || 'Pengguna',
-      photoURL: user.photoURL || undefined,
-      role: isAdmin ? 'admin' : 'user',
-      createdAt: now,
-      lastLoginAt: now
-    };
-    await setDoc(userRef, profile);
+  try {
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists()) {
+      const existing = userSnap.data() as UserProfile;
+      profile = {
+        ...existing,
+        email: user.email || '',
+        displayName: user.displayName || user.email || 'Pengguna',
+        photoURL: user.photoURL || undefined,
+        role: isAdmin ? 'admin' : (existing.role || 'user'),
+        lastLoginAt: now
+      };
+      await setDoc(userRef, profile, { merge: true });
+    } else {
+      await setDoc(userRef, profile);
+    }
+  } catch (error) {
+    console.warn("Koneksi Firestore offline / tertunda saat sinkronisasi profil, menggunakan profil lokal:", error);
   }
 
   return profile;
