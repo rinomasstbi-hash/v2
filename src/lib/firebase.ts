@@ -110,27 +110,31 @@ export const syncUserProfile = async (user: User): Promise<UserProfile> => {
     lastLoginAt: now
   };
 
-  try {
-    const userRef = doc(db, 'users', user.uid);
-    const userSnap = await getDoc(userRef);
+  // Perform Firestore sync asynchronously in background without blocking return
+  (async () => {
+    try {
+      const userRef = doc(db, 'users', user.uid);
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 2500));
+      const userSnap = await Promise.race([getDoc(userRef), timeoutPromise]) as any;
 
-    if (userSnap.exists()) {
-      const existing = userSnap.data() as UserProfile;
-      profile = {
-        ...existing,
-        email: user.email || '',
-        displayName: user.displayName || user.email || 'Pengguna',
-        photoURL: user.photoURL || undefined,
-        role: isAdmin ? 'admin' : (existing.role || 'user'),
-        lastLoginAt: now
-      };
-      await setDoc(userRef, profile, { merge: true });
-    } else {
-      await setDoc(userRef, profile);
+      if (userSnap && userSnap.exists()) {
+        const existing = userSnap.data() as UserProfile;
+        const updatedProfile = {
+          ...existing,
+          email: user.email || '',
+          displayName: user.displayName || user.email || 'Pengguna',
+          photoURL: user.photoURL || undefined,
+          role: isAdmin ? 'admin' : (existing.role || 'user'),
+          lastLoginAt: now
+        };
+        await setDoc(userRef, updatedProfile, { merge: true });
+      } else {
+        await setDoc(userRef, profile);
+      }
+    } catch (error) {
+      console.warn("Koneksi Firestore offline / tertunda saat sinkronisasi profil:", error);
     }
-  } catch (error) {
-    console.warn("Koneksi Firestore offline / tertunda saat sinkronisasi profil, menggunakan profil lokal:", error);
-  }
+  })();
 
   return profile;
 };
