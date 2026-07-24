@@ -120,86 +120,24 @@ function createPrompt(data: RPMInput): string {
     lkpdInstructions += `
         <br class="page-break" />
         <h3><b>Lampiran ${meetingNumber}: Lembar Kerja Peserta Didik (Pertemuan Ke-${meetingNumber})</b></h3>
-          <p><b>PENTING:</b> Buat LKPD ini dalam format TABEL HTML yang rapi, terstruktur, dan mudah diisi siswa, yang disesuaikan secara khusus dengan praktik pedagogis <b>${practice}</b>.</p>
-
-          <table class="lkpd-identity-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
-            <colgroup><col style="width: 50%;" /><col style="width: 50%;" /></colgroup>
-            <tr style="background-color: #f2f2f2;">
-              <th colspan="2" style="border: 1px solid #000; padding: 8px; text-align: center; font-size: 13pt;"><b>LEMBAR KERJA PESERTA DIDIK (LKPD) - PERTEMUAN KE-${meetingNumber}</b></th>
-            </tr>
-            <tr>
-              <td style="width: 50%; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
-                <b>Nama Siswa / Kelompok:</b> ___________________________<br/>
-                <b>Kelas / Semester:</b> ${className} / ${semester}<br/>
-                <b>No. Absen / Anggota:</b> ___________________________
-              </td>
-              <td style="width: 50%; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
-                <b>Mata Pelajaran:</b> ${subject}<br/>
-                <b>Materi / Topik:</b> ${subjectMatter}<br/>
-                <b>Praktik Pedagogis:</b> ${practice}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="border: 1px solid #000; padding: 8px; background-color: #fafafa; text-align: left;">
-                <b>Petunjuk Pengerjaan:</b><br/>
-                Tuliskan petunjuk pengerjaan LKPD yang jelas dan sistematis sesuai dengan sintaks <b>${practice}</b>.
-              </td>
-            </tr>
-          </table>
-
-          <table class="lkpd-activity-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
-            <colgroup>
-              <col style="width: 22.68pt;" />
-              <col style="width: 100.63pt;" />
-              <col style="width: 354.05pt;" />
-            </colgroup>
-            <thead>
-              <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center;">No</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 100.63pt; text-align: left;">Tahapan Sintaks (${practice})</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">1</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
-                  Sajikan ringkasan materi/konsep kunci yang relevan untuk pertemuan ini + 2-3 pertanyaan pemahaman dasar beserta tempat/ruang jawaban siswa.
-                </td>
-              </tr>
-              <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">2</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
-                  Berikan 1 tugas utama, studi kasus, atau langkah eksperimen/proyek yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi pengerjaan rinci dan ruang lembar pengerjaan siswa.
-                </td>
-              </tr>
-              <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">3</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
-                  Berikan 2-3 pertanyaan refleksi mendalam mengenai pengalaman belajar siswa dengan metode <b>${practice}</b> pada pertemuan ini.
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <table class="lkpd-checklist-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-top: 10px; border: 1px solid #000; word-wrap: break-word;">
-            <colgroup><col style="width: 100%;" /></colgroup>
-            <thead>
-              <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 8px; width: 100%; text-align: left;">Ceklis Penilaian Diri & Catatan Guru:</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 100%; text-align: left;">
-                  Buatlah tabel ceklis pemahaman diri sederhana (misal: "Saya sudah memahami...", "Saya dapat mengaplikasikan...") serta kalimat penyemangat untuk peserta didik.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <p><b>PENTING:</b> Desain LKPD ini secara spesifik untuk mendukung praktik pedagogis <b>${practice}</b>.</p>
+          <h4><b>A. Identitas</b></h4>
+          <p>Nama: _______________________<br>
+             Kelas: ${className}<br>
+             No. Absen: _______________________<br>
+             Pertemuan Ke: ${meetingNumber}</p>
+          <h4><b>B. Petunjuk Penggunaan</b></h4>
+          <p>Jelaskan cara mengerjakan LKPD yang disesuaikan dengan sintaks dari <b>${practice}</b>.</p>
+          <h4><b>C. Kegiatan Pembelajaran (Sintaks: ${practice})</b></h4>
+          <p>Integrasikan sintaks dan pengalaman belajar tanpa menggunakan tabel. Buat kegiatan yang relevan dengan sintaks <b>${practice}</b>. Misalnya, jika PjBL, fokus pada langkah-langkah proyek. Jika Inquiry-Discovery, fokus pada pertanyaan penuntun dan observasi.</p>
+            <h5><b>1. Memahami</b></h5>
+            <p>Sajikan ringkasan materi singkat yang relevan untuk pertemuan ini + 2-3 pertanyaan pemahaman kunci.</p>
+            <h5><b>2. Mengaplikasikan</b></h5>
+            <p>Berikan 1 tugas inti atau studi kasus yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi yang jelas.</p>
+            <h5><b>3. Merefleksikan</b></h5>
+            <p>Berikan 2-3 pertanyaan refleksi yang mendalam terkait pengalaman belajar siswa menggunakan metode <b>${practice}</b> pada pertemuan ini.</p>
+          <h4><b>D. Penutup</b></h4>
+          <p>Berikan sebuah kalimat penyemangat dan checklist pemahaman diri sederhana.</p>
     `;
   }
 
@@ -276,31 +214,7 @@ function createPrompt(data: RPMInput): string {
     ${kbcInstruction}
     ${integrationPrompt}
 
-    **ATURAN GAYA PENTING (PERATAAN TEKS):** 
-    - Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar (Tabel RPM Utama), Anda dapat menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
-    - NAMUN, UNTUK SELURUH BAGIAN LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menggunakan perataan TEKS KIRI STANDAR (\`style="text-align: left;"\`) dan DILARANG KERAS menggunakan justify.
-
-    **ATURAN POSISI & UKURAN TABEL (PASTI CENTER & KANAN-KIRI PAS DI MS WORD):**
-    - Seluruh tabel yang Anda buat (Tabel RPM Utama, Tabel Tanda Tangan, Tabel LKPD, dan Tabel Asesmen) HARUS diposisikan TEPAT DI TENGAH DOKUMEN dengan menambahkan atribut \`width="100%" align="center"\` serta gaya \`margin-left: auto; margin-right: auto;\` pada tag \`<table>\`.
-    - Atribut utama setiap tabel wajib disetel: \`width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; word-wrap: break-word; overflow-wrap: break-word;"\`.
-    - DILARANG KERAS menentukan lebar tabel atau kolom dalam angka 'pt' atau 'px' absolut yang besar (seperti 481pt, 353pt, atau 600px) karena akan membuat tabel mekar dan melebihi margin kertas A4 di MS Word. SELALU gunakan persentase (%) yang totalnya tepat 100%!
-    
-    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (PERSENTASE 100%):**
-    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis \`class="lkpd-activity-table"\`, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan \`width="100%" align="center"\` dengan persentase dan \`table-layout: fixed\`.
-    - Pada Tabel LKPD Tahapan Pedagogis (3 kolom, \`class="lkpd-activity-table"\`):
-      1. Kolom 1 (No): \`width="6%"\`
-      2. Kolom 2 (Tahapan Sintaks): \`width="20%"\`
-      3. Kolom 3 (Kegiatan & Tugas Peserta Didik): \`width="74%"\` (Total = 6% + 20% + 74% = tepat 100%).
-    - Pada Tabel LKPD Identitas: Kolom 1 \`width="50%"\`, Kolom 2 \`width="50%"\`.
-    - Pada Tabel Asesmen & Rubrik lainnya, pastikan total penjumlahan seluruh lebar kolom (persentase) selalu tepat 100%.
-
-    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (STANDAR RAPI):**
-    - Setiap kali membuat daftar poin (\`<ul><li>\`) atau penomoran (\`<ol><li>\`) di bagian RPM maupun Lampiran, gunakan tag HTML \`<ul>\` atau \`<ol>\` standar tanpa menambah simbol manual seperti \`-\` atau \`•\`.
-    - Berikan gaya ringkas dan rapi:
-      - Untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: outside; padding-left: 14pt; margin-left: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
-      - Untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: outside; padding-left: 16pt; margin-left: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
-      - Untuk \`<li>\` disetel \`style="margin-left: 0pt; padding-left: 0pt; margin-bottom: 2pt;"\`
-    - DILARANG KERAS menggunakan padding/margin kiri besar (seperti 40px) atau tabulasi spasi berlebihan agar poin bullet dan angka SELALU MUNCUL DENGAN JELAS, rapi dan sejajar.
+    **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar maupun seluruh bagian LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
@@ -313,12 +227,12 @@ function createPrompt(data: RPMInput): string {
 
     Gunakan sebuah div kontainer utama dengan gaya \`style="color: #000;"\`. Di dalamnya, buatlah struktur berikut:
 
-    1.  **Tabel RPM (Dua Kolom):** Buat sebuah tabel HTML (\`<table>\`) dengan gaya \`style="width: 100%; table-layout: fixed; border-collapse: collapse; word-wrap: break-word;"\`. Kolom pertama adalah "Komponen" dan kedua "Isi". 
+    1.  **Tabel RPM (Dua Kolom):** Buat sebuah tabel HTML (\`<table>\`) dengan kelas 'w-full border-collapse'. Kolom pertama adalah "Komponen" dan kedua "Isi". 
         - Gunakan \`<thead>\` untuk header.
         - Gunakan \`<tbody>\` untuk konten.
         - Untuk setiap baris komponen, gunakan \`<tr>\`.
         - Kolom "Komponen" (\`<td>\`) harus bold dan rata atas (\`style="font-weight: bold; vertical-align: top; width: 30%; padding: 8px; border: 1px solid #ddd;"\`).
-        - Kolom "Isi" (\`<td>\`) harus diberi gaya \`style="width: 70%; padding: 8px; border: 1px solid #ddd;"\`. Gunakan aturan gaya umum untuk perataan teks paragraf di dalamnya.
+        - Kolom "Isi" (\`<td>\`) harus diberi gaya \`style="padding: 8px; border: 1px solid #ddd;"\`. Gunakan aturan gaya umum untuk perataan teks paragraf di dalamnya.
         - Untuk header seksi seperti "IDENTITAS", gunakan \`<tr style="background-color: #f2f2f2;"><td colspan="2" style="font-weight: bold; padding: 8px; border: 1px solid #ddd;">NAMA SEKSI</td></tr>\`.
 
     **Isi Tabel RPM:**
@@ -355,23 +269,13 @@ function createPrompt(data: RPMInput): string {
        - Asesmen Formatif (for/as learning): Jelaskan metode asesmen formatif (misal: observasi partisipasi, penilaian LKPD, penilaian antar teman).
        - Asesmen Sumatif (of learning): Jelaskan metode asesmen sumatif (misal: tes tulis di akhir bab, penilaian proyek, presentasi).
 
-    2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan atribut dan gaya persis berikut:
-        \`<table class="signature-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; border: none; margin-top: 20px; margin-bottom: 20px;">\`
-        \`<colgroup><col style="width: 50%;" /><col style="width: 50%;" /></colgroup>\`
-        \`<tr>\`
-          \`<td class="col-kepala" style="width: 50%; border: none; text-align: left; vertical-align: top; line-height: 1.4; padding: 4pt;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-          \`<td class="col-guru" style="width: 50%; border: none; text-align: left; vertical-align: top; line-height: 1.4; padding: 4pt;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
-        \`</tr>\`
-        \`</table>\`
-        **PENTING:** Lebar kolom disetel 50% dan 50% serta \`table-layout: fixed\` tanpa border agar tanda tangan tampil rapi, sejajar, dan pas dengan lebar halaman A4.
+    2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table style="width: 100%; border: none; text-align: center; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`).
+        - Kolom kiri: \`<td style="width: 50%; border: none; line-height: 1.2;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
+        - Kolom kanan: \`<td style="width: 50%; border: none; line-height: 1.2;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
 
-    3.  **LAMPIRAN:** Bungkus seluruh bagian Lampiran di dalam sebuah div dengan kelas 'lampiran-section' dan gaya \`style="text-align: left;"\`:
-        \`<br class="page-break" />\`
-        \`<div class="lampiran-section" style="text-align: left;">\`
-          \`<h2 style="text-align: center; font-size: 24pt; font-weight: bold;">LAMPIRAN-LAMPIRAN</h2>\`
-          ${lkpdInstructions}
-          ${assessmentSectionHtml}
-        \`</div>\`
+    3.  **LAMPIRAN:** Gunakan \`<br class="page-break" /><h2 style="text-align: center; font-size: 36px; font-weight: bold;">LAMPIRAN-LAMPIRAN</h2>\` untuk memulai di halaman baru.
+        ${lkpdInstructions}
+        ${assessmentSectionHtml}
 
     Pastikan seluruh output adalah satu blok kode HTML yang valid dan rapi.
     `;

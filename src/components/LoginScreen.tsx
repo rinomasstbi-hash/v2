@@ -46,15 +46,15 @@ export const LoginScreen: React.FC = () => {
               className="h-16 w-16 object-contain" 
             />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Generator RPM/RPP/Modul Ajar</h1>
-          <p className="text-cyan-300 text-sm mt-1 font-medium">Kumer - KBC - MTsN 4 Jombang</p>
+          <h1 className="text-2xl font-bold tracking-tight">Generator RPM KBC</h1>
+          <p className="text-cyan-300 text-sm mt-1 font-medium">MTsN 4 Jombang</p>
         </div>
 
         <div className="p-8">
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-slate-800">Masuk Akun Google</h2>
             <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-              Silakan masuk menggunakan akun Google Anda.
+              Silakan masuk menggunakan akun Google / Gmail Anda untuk mengakses Generator Rencana Pembelajaran Mendalam (RPM).
             </p>
           </div>
 

@@ -83,7 +83,6 @@ const App: React.FC = () => {
   const [currentLoadingMessage, setCurrentLoadingMessage] = useState(loadingMessages[0]);
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
   const [view, setView] = useState<'form' | 'output'>('form');
-  const [desktopLayout, setDesktopLayout] = useState<'split' | 'full'>('split');
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [colorIndex, setColorIndex] = useState<number>(0);
   const [isServerBusy, setIsServerBusy] = useState<boolean>(false);
@@ -228,40 +227,14 @@ const App: React.FC = () => {
 
       <main className="container mx-auto p-4 md:p-8 lg:p-12">
         {view === 'form' ? (
-          <div className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 no-print">
-            <div className="mb-6 pb-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-2">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-800">
-                  Formulir Input <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span>
-                </h2>
-                <p className="text-sm text-slate-500 mt-1">
-                  Isi formulir 2 bilah di bawah ini untuk menghasilkan Rencana Pembelajaran Mendalam (RPM) secara otomatis.
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200 self-start md:self-auto">
-                <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
-                Tampilan Formulir 2 Bilah Desktop
-              </span>
-            </div>
-
+          <div className="bg-white p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-200/50 no-print">
+            <h2 className="text-3xl font-bold text-slate-800 mb-2">Formulir Input <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span></h2>
+            <p className="mb-8 text-slate-500">Isi semua kolom di bawah ini untuk menghasilkan Rencana Pembelajaran Mendalam (RPM) secara otomatis.</p>
             <RPMForm onSubmit={handleFormSubmit} isLoading={isLoading} />
           </div>
         ) : (
-          <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 print-container">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 no-print">
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-800">
-                Hasil <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span> Anda
-              </h2>
-              <button
-                onClick={handleBackToForm}
-                className="text-xs sm:text-sm bg-slate-100 text-slate-700 hover:bg-slate-200 px-4 py-2 rounded-lg font-semibold flex items-center gap-1.5 transition"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Kembali ke Formulir
-              </button>
-            </div>
+          <div className="bg-white p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-200/50 print-container">
+             <h2 className="text-3xl font-bold text-slate-800 mb-6 no-print">Hasil <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span> Anda</h2>
             
             {isLoading && <LoadingScreen message={currentLoadingMessage} progress={loadingProgress} color={spinnerColors[colorIndex]} />}
 
@@ -272,7 +245,7 @@ const App: React.FC = () => {
             )}
 
             {!isLoading && !error && generatedRpm && (
-                <div className="mt-4">
+                <div className="mt-6">
                   <RPMOutput 
                       htmlContent={generatedRpm} 
                       isGenerating={isLoading} 
