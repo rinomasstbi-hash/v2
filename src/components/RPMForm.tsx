@@ -135,9 +135,9 @@ export const RPMForm: React.FC<RPMFormProps> = ({ onSubmit, isLoading }) => {
         className: 'IX',
         semester: 'V',
         subject: "Al-Qur'an Hadis (Qurdits)",
-        learningObjectives: 'Siswa mampu menganalisis kandungan Q.S. al-An\'am: 162-163 dan Hadis riwayat Bukhari Muslim tentang ikhlas dalam beribadah, serta mengaitkannya dengan perilaku dalam kehidupan sehari-hari.',
+        learningObjectives: 'Murid mampu menganalisis kandungan Q.S. al-An\'am: 162-163 dan Hadis riwayat Bukhari Muslim tentang ikhlas dalam beribadah, serta mengaitkannya dengan perilaku dalam kehidupan sehari-hari.',
         subjectMatter: 'Ikhlas dalam Beribadah (Studi Q.S. al-An\'am: 162-163 dan Hadis Terkait)',
-        studentTarget: 'Siswa kelas IX madrasah tsanawiyah dengan latar belakang pemahaman yang beragam, aktif berdiskusi, dan menyukai gaya belajar kontekstual.',
+        studentTarget: 'Murid kelas IX madrasah tsanawiyah dengan latar belakang pemahaman yang beragam, aktif berdiskusi, dan menyukai gaya belajar kontekstual.',
         language: 'Bahasa Arab',
         meetings: 2,
         pedagogicalPractices: [PedagogicalPractice.CTL, PedagogicalPractice.COOPERATIVE],
@@ -285,13 +285,13 @@ export const RPMForm: React.FC<RPMFormProps> = ({ onSubmit, isLoading }) => {
           <div>
             <TextareaField 
               id="studentTarget" 
-              label="Target / Karakteristik Siswa (Opsional)" 
+              label="Target Murid (Opsional)" 
               value={formData.studentTarget || ''} 
               onChange={handleChange} 
               required={false}
               rows={2}
-              placeholder="Contoh: Siswa kelas IX yang aktif, terbiasa dengan metode belajar kelompok, dan memiliki latar belakang minat visual..."
-              helperText="Biarkan kosong jika ingin AI secara otomatis mendeskripsikan karakteristik umum siswa berdasarkan jenjang kelas."
+              placeholder="Contoh: Murid kelas IX yang aktif, terbiasa dengan metode belajar kelompok, dan memiliki latar belakang minat visual..."
+              helperText="Biarkan kosong jika ingin AI secara otomatis mendeskripsikan karakteristik umum murid berdasarkan jenjang kelas."
             />
           </div>
 

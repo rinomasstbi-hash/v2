@@ -30,7 +30,7 @@ function createPrompt(data: RPMInput): string {
 
   const studentDescription = studentTarget && studentTarget.trim() !== ''
     ? studentTarget.trim()
-    : `Generate deskripsi singkat karakteristik umum siswa kelas ${className} di madrasah tsaniyah.`;
+    : `Generate deskripsi singkat karakteristik umum murid kelas ${className} di madrasah tsaniyah.`;
 
   const practicesText = pedagogicalPractices
     .map((practice, index) => `Pertemuan ${index + 1}: ${practice}`)
@@ -48,9 +48,9 @@ function createPrompt(data: RPMInput): string {
     integrationPrompt = `
       **INSTRUKSI TAMBAHAN (SRA):**
       Integrasikan prinsip-prinsip Satuan Pendidikan Ramah Anak (SRA) berikut ke dalam aktivitas pembelajaran:
-      - **Inklusif & Non-Diskriminatif:** Pastikan semua siswa merasa diterima dan dihargai tanpa memandang latar belakang.
-      - **Partisipatif:** Rancang kegiatan yang mendorong siswa untuk aktif menyuarakan pendapat dan terlibat dalam pengambilan keputusan.
-      - **Disiplin Positif:** Terapkan pendekatan disiplin tanpa kekerasan fisik/psikis dan tidak merendahkan martabat siswa dalam skenario interaksi guru-siswa.
+      - **Inklusif & Non-Diskriminatif:** Pastikan semua murid merasa diterima dan dihargai tanpa memandang latar belakang.
+      - **Partisipatif:** Rancang kegiatan yang mendorong murid untuk aktif menyuarakan pendapat dan terlibat dalam pengambilan keputusan.
+      - **Disiplin Positif:** Terapkan pendekatan disiplin tanpa kekerasan fisik/psikis dan tidak merendahkan martabat murid dalam skenario interaksi guru-murid.
       - **Penanda dan Pewarnaan (PENTING):**
         - Untuk setiap bagian yang secara eksplisit mengintegrasikan nilai SRA, bungkus teks yang relevan dalam tag \`<span style="background-color: #37E69A;">\`.
         - AKHIRI teks yang disorot dengan penanda tebal yang spesifik, yang menjelaskan prinsip SRA yang sedang diintegrasikan. Contoh: \`<b>(Prinsip Partisipasi Anak)</b>\`, \`<b>(Pendekatan Disiplin Positif)</b>\`, atau \`<b>(Prinsip Inklusivitas)</b>\`. JANGAN gunakan label generik "Insersi Nilai SRA".
@@ -61,7 +61,7 @@ function createPrompt(data: RPMInput): string {
       Sisipkan kompetensi Literasi (pemahaman tekstual, inferensi, evaluasi) ke dalam modul ajar ini.
       Fokuskan modifikasi pada:
       - Aktivitas: Menggunakan stimulus berupa teks (artikel, berita, kutipan, atau studi kasus) yang relevan dengan materi.
-      - Asesmen: Mengukur kemampuan penalaran dan analisis teks siswa terhadap stimulus tersebut.
+      - Asesmen: Mengukur kemampuan penalaran dan analisis teks murid terhadap stimulus tersebut.
       - **Penanda dan Pewarnaan (PENTING):**
         - Untuk setiap bagian yang dimodifikasi untuk integrasi Literasi, bungkus teks yang relevan dalam tag \`<span style="background-color: #F0F32B;">\`.
         - Setelah teks yang disorot, tambahkan penanda tebal yang spesifik, yang menjelaskan kompetensi Literasi yang sedang diperkuat. Contoh: \`<b>(Penguatan Literasi: Evaluasi Teks)</b>\`, atau \`<b>(Penguatan Literasi: Pemahaman Tekstual)</b>\`. JANGAN gunakan label generik "Penguatan Literasi".
@@ -74,7 +74,7 @@ function createPrompt(data: RPMInput): string {
         <li><b>1. Stimulus:</b> Awali SETIAP soal dengan stimulus berbasis teks yang relevan dengan materi. Stimulus dapat berupa:<br/>
         - Teks singkat (artikel, berita, kutipan)<br/>
         - Studi kasus singkat</li>
-        <li><b>2. Pertanyaan:</b> Buat pertanyaan yang menuntut siswa untuk:<br/>
+        <li><b>2. Pertanyaan:</b> Buat pertanyaan yang menuntut murid untuk:<br/>
         - <b>Menganalisis:</b> Menguraikan informasi dari stimulus teks.<br/>
         - <b>Mengevaluasi:</b> Memberikan penilaian atau argumen berdasarkan stimulus teks.<br/>
         - <b>Menghubungkan:</b> Mengaitkan konsep dalam teks dengan konteks lain.</li>
@@ -89,7 +89,7 @@ function createPrompt(data: RPMInput): string {
       Sisipkan kompetensi Numerasi (interpretasi data, penalaran matematis, pemecahan masalah) ke dalam modul ajar ini.
       Fokuskan modifikasi pada:
       - Aktivitas: Menggunakan stimulus berupa angka, data, tabel, statistik, atau infografis yang relevan dengan materi.
-      - Asesmen: Mengukur kemampuan interpretasi data dan pemecahan masalah siswa terhadap stimulus tersebut.
+      - Asesmen: Mengukur kemampuan interpretasi data dan pemecahan masalah murid terhadap stimulus tersebut.
       - **Penanda dan Pewarnaan (PENTING):**
         - Untuk setiap bagian yang dimodifikasi untuk integrasi Numerasi, bungkus teks yang relevan dalam tag \`<span style="background-color: #90CDF4;">\`.
         - Setelah teks yang disorot, tambahkan penanda tebal yang spesifik, yang menjelaskan kompetensi Numerasi yang sedang diperkuat. Contoh: \`<b>(Penguatan Numerasi: Interpretasi Data)</b>\`, atau \`<b>(Penguatan Numerasi: Pemecahan Masalah)</b>\`. JANGAN gunakan label generik "Penguatan Numerasi".
@@ -102,7 +102,7 @@ function createPrompt(data: RPMInput): string {
         <li><b>1. Stimulus:</b> Awali SETIAP soal dengan stimulus berbasis numerik/data yang relevan dengan materi. Stimulus dapat berupa:<br/>
         - Data (tabel, statistik)<br/>
         - Visual (grafik, diagram, infografis)</li>
-        <li><b>2. Pertanyaan:</b> Buat pertanyaan yang menuntut siswa untuk:<br/>
+        <li><b>2. Pertanyaan:</b> Buat pertanyaan yang menuntut murid untuk:<br/>
         - <b>Menganalisis:</b> Menguraikan atau membaca tren dari data.<br/>
         - <b>Mengevaluasi:</b> Memberikan penilaian kuantitatif berdasarkan stimulus.<br/>
         - <b>Memecahkan masalah:</b> Menggunakan data untuk menarik simpulan atau solusi logis.</li>
@@ -119,15 +119,15 @@ function createPrompt(data: RPMInput): string {
     const practice = pedagogicalPractices[i];
     lkpdInstructions += `
         <br class="page-break" />
-        <h3><b>Lampiran ${meetingNumber}: Lembar Kerja Peserta Didik (Pertemuan Ke-${meetingNumber})</b></h3>
-          <p><b>PENTING:</b> Desain LKPD ini secara spesifik untuk mendukung praktik pedagogis <b>${practice}</b>.</p>
+        <h3><b>Lampiran ${meetingNumber}: Lembar Kerja Murid (Pertemuan Ke-${meetingNumber})</b></h3>
+          <p><b>PENTING:</b> Desain LKM ini secara spesifik untuk mendukung praktik pedagogis <b>${practice}</b>.</p>
           <h4><b>A. Identitas</b></h4>
           <p>Nama: _______________________<br>
              Kelas: ${className}<br>
              No. Absen: _______________________<br>
              Pertemuan Ke: ${meetingNumber}</p>
           <h4><b>B. Petunjuk Penggunaan</b></h4>
-          <p>Jelaskan cara mengerjakan LKPD yang disesuaikan dengan sintaks dari <b>${practice}</b>.</p>
+          <p>Jelaskan cara mengerjakan LKM yang disesuaikan dengan sintaks dari <b>${practice}</b>.</p>
           <h4><b>C. Kegiatan Pembelajaran (Sintaks: ${practice})</b></h4>
           <p>Integrasikan sintaks dan pengalaman belajar tanpa menggunakan tabel. Buat kegiatan yang relevan dengan sintaks <b>${practice}</b>. Misalnya, jika PjBL, fokus pada langkah-langkah proyek. Jika Inquiry-Discovery, fokus pada pertanyaan penuntun dan observasi.</p>
             <h5><b>1. Memahami</b></h5>
@@ -135,7 +135,7 @@ function createPrompt(data: RPMInput): string {
             <h5><b>2. Mengaplikasikan</b></h5>
             <p>Berikan 1 tugas inti atau studi kasus yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi yang jelas.</p>
             <h5><b>3. Merefleksikan</b></h5>
-            <p>Berikan 2-3 pertanyaan refleksi yang mendalam terkait pengalaman belajar siswa menggunakan metode <b>${practice}</b> pada pertemuan ini.</p>
+            <p>Berikan 2-3 pertanyaan refleksi yang mendalam terkait pengalaman belajar murid menggunakan metode <b>${practice}</b> pada pertemuan ini.</p>
           <h4><b>D. Penutup</b></h4>
           <p>Berikan sebuah kalimat penyemangat dan checklist pemahaman diri sederhana.</p>
     `;
@@ -146,11 +146,11 @@ function createPrompt(data: RPMInput): string {
 
   switch (language) {
     case 'Bahasa Arab':
-      openingInstruction = `**Mulai kegiatan awal dengan salam pembuka Islami yang interaktif dalam Bahasa Arab. PENTING: Tuliskan transliterasi Latin terlebih dahulu, diikuti dengan teks Arab asli dalam tanda kurung. Contoh: 'Assalamu'alaikum warahmatullahi wabarakatuh (السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ). Kaifa halukum jamian? (كَيْفَ حَالُكُمْ جَمِيْعًا؟) Mari kita mulai pelajaran hari ini dengan membaca doa bersama.' Buatlah kalimat yang mengajak siswa berinteraksi, BUKAN hanya salam saja.**`;
+      openingInstruction = `**Mulai kegiatan awal dengan salam pembuka Islami yang interaktif dalam Bahasa Arab. PENTING: Tuliskan transliterasi Latin terlebih dahulu, diikuti dengan teks Arab asli dalam tanda kurung. Contoh: 'Assalamu'alaikum warahmatullahi wabarakatuh (السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ). Kaifa halukum jamian? (كَيْفَ حَالُكُمْ جَمِيْعًا؟) Mari kita mulai pelajaran hari ini dengan membaca doa bersama.' Buatlah kalimat yang mengajak murid berinteraksi, BUKAN hanya salam saja.**`;
       closingInstruction = `**Akhiri kegiatan penutup dengan kalimat penutup yang interaktif dalam Bahasa Arab. PENTING: Tuliskan transliterasi Latin terlebih dahulu, diikuti dengan teks Arab asli dalam tanda kurung. Contoh: 'Alhamdulillah, kita telah menyelesaikan pelajaran hari ini. Hayya nakhtatim darsana bi qira'ati hamdalah (هيا نختتم درسنا بقراءة الحمدلة). Wassalamu'alaikum warahmatullahi wabarakatuh (وَالسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ).' Buatlah kalimat penutup yang baik, BUKAN hanya salam saja.**`;
       break;
     case 'Bahasa Inggris':
-      openingInstruction = `**Mulai kegiatan awal ini dengan salam pembuka yang interaktif dalam Bahasa Inggris. Contohnya, 'Good morning, class! How is everyone today? Let's start our lesson by...' Buatlah kalimat yang mengajak siswa berinteraksi, BUKAN hanya salam saja.**`;
+      openingInstruction = `**Mulai kegiatan awal ini dengan salam pembuka yang interaktif dalam Bahasa Inggris. Contohnya, 'Good morning, class! How is everyone today? Let's start our lesson by...' Buatlah kalimat yang mengajak murid berinteraksi, BUKAN hanya salam saja.**`;
       closingInstruction = `**Akhiri kegiatan penutup ini dengan kalimat penutup yang interaktif dalam Bahasa Inggris. Contohnya, 'Alright everyone, that's all for today. Do you have any questions? See you next time! Good bye.' Buatlah kalimat penutup yang baik, BUKAN hanya salam saja.**`;
       break;
     default:
@@ -162,16 +162,16 @@ function createPrompt(data: RPMInput): string {
     <br class="page-break" />
     <h3><b>Lampiran ${meetings + 1}: Instrumen Asesmen</b></h3>
       <h4><b>A. Asesmen Diagnostik (Awal)</b></h4>
-      <p>Buat 5 soal pertanyaan pemantik atau kuis singkat yang relevan dengan materi, beserta kunci jawabannya, untuk mengukur pemahaman awal siswa.</p>
+      <p>Buat 5 soal pertanyaan pemantik atau kuis singkat yang relevan dengan materi, beserta kunci jawabannya, untuk mengukur pemahaman awal murid.</p>
       
       <h4><b>B. Instrumen Asesmen Formatif</b></h4>
-      <p><b>PENTING:</b> Buat instrumen yang relevan dengan metode asesmen formatif yang Anda jelaskan di bagian E.2. Misalnya: Jika penilaian LKPD, buat rubrik penilaian detail untuk setiap LKPD. Jika observasi, buat lembar ceklis observasi partisipasi siswa.</p>
+      <p><b>PENTING:</b> Buat instrumen yang relevan dengan metode asesmen formatif yang Anda jelaskan di bagian E.2. Misalnya: Jika penilaian LKM (Lembar Kerja Murid), buat rubrik penilaian detail untuk setiap LKM. Jika observasi, buat lembar ceklis observasi partisipasi murid.</p>
       
       <h4><b>C. Instrumen Asesmen Sumatif</b></h4>
       <p><b>PENTING:</b> Buat instrumen yang relevan dengan metode asesmen sumatif yang Anda jelaskan di bagian E.3. Misalnya: Jika tes tulis, buat 5-10 soal pilihan ganda atau esai lengkap dengan kunci jawaban dan pedoman penskoran. Jika penilaian proyek/produk, buat rubrik penilaian yang komprehensif.</p>
       
       <h4><b>D. Rubrik Penilaian Sikap</b></h4>
-      <p>Buat satu tabel rubrik HTML untuk menilai sikap siswa yang mencakup dimensi lulusan yang dipilih (misalnya: Bernalar Kritis, Kreatif, Gotong Royong, dll.).</p>
+      <p>Buat satu tabel rubrik HTML untuk menilai sikap murid yang mencakup dimensi lulusan yang dipilih (misalnya: Bernalar Kritis, Kreatif, Gotong Royong, dll.).</p>
   `;
 
   if (integrationOption === IntegrationOption.LITERASI || integrationOption === IntegrationOption.NUMERASI) {
@@ -181,16 +181,16 @@ function createPrompt(data: RPMInput): string {
     <br class="page-break" />
     <h3><b>Lampiran ${meetings + 1}: Instrumen Asesmen</b></h3>
       <h4><b>A. Asesmen Diagnostik (Awal)</b></h4>
-      <p>Buat 5 soal pertanyaan pemantik atau kuis singkat yang relevan dengan materi, beserta kunci jawabannya, untuk mengukur pemahaman awal siswa.</p>
+      <p>Buat 5 soal pertanyaan pemantik atau kuis singkat yang relevan dengan materi, beserta kunci jawabannya, untuk mengukur pemahaman awal murid.</p>
       
       <h4><b>B. Instrumen Asesmen Formatif (Berbasis ${label})</b></h4>
-      <p>Buatlah instrumen asesmen formatif (misalnya, soal analisis kasus dalam LKPD). Pastikan setiap soal mengikuti format HOTS berbasis ${label} (Stimulus lalu Pertanyaan) seperti yang telah diinstruksikan sebelumnya, lengkap dengan kunci jawaban dan pedoman penskoran. Ingat untuk menerapkan penandaan ${label} <span style="background-color: ${isLiterasi ? '#F0F32B' : '#90CDF4'};">(warna disorot)</span> pada soal yang Anda buat.</p>
+      <p>Buatlah instrumen asesmen formatif (misalnya, soal analisis kasus dalam LKM). Pastikan setiap soal mengikuti format HOTS berbasis ${label} (Stimulus lalu Pertanyaan) seperti yang telah diinstruksikan sebelumnya, lengkap dengan kunci jawaban dan pedoman penskoran. Ingat untuk menerapkan penandaan ${label} <span style="background-color: ${isLiterasi ? '#F0F32B' : '#90CDF4'};">(warna disorot)</span> pada soal yang Anda buat.</p>
       
       <h4><b>C. Instrumen Asesmen Sumatif (Berbasis ${label})</b></h4>
       <p>Buatlah 5-10 soal untuk asesmen sumatif (bisa pilihan ganda atau esai). Pastikan setiap soal mengikuti format HOTS berbasis ${label} (Stimulus lalu Pertanyaan) seperti yang telah diinstruksikan sebelumnya, lengkap dengan kunci jawaban dan pedoman penskoran. Ingat untuk menerapkan penandaan ${label} <span style="background-color: ${isLiterasi ? '#F0F32B' : '#90CDF4'};">(warna disorot)</span> pada soal yang Anda buat.</p>
       
       <h4><b>D. Rubrik Penilaian Sikap</b></h4>
-      <p>Buat satu tabel rubrik HTML untuk menilai sikap siswa yang mencakup dimensi lulusan yang dipilih (misalnya: Bernalar Kritis, Kreatif, Gotong Royong, dll.).</p>
+      <p>Buat satu tabel rubrik HTML untuk menilai sikap murid yang mencakup dimensi lulusan yang dipilih (misalnya: Bernalar Kritis, Kreatif, Gotong Royong, dll.).</p>
     `;
   }
 
@@ -204,7 +204,7 @@ function createPrompt(data: RPMInput): string {
     - Mata Pelajaran: ${subject}
     - Tujuan Pembelajaran: ${learningObjectives}
     - Materi Pelajaran: ${subjectMatter}
-    - Karakteristik Siswa: ${studentTarget ? studentTarget : 'Otomatis oleh AI'}
+    - Target Murid: ${studentTarget ? studentTarget : 'Otomatis oleh AI'}
     - Bahasa Pembuka/Penutup: ${language}
     - Jumlah Pertemuan: ${meetings}
     - Praktik Pedagogis per Pertemuan: ${practicesText}
@@ -214,7 +214,7 @@ function createPrompt(data: RPMInput): string {
     ${kbcInstruction}
     ${integrationPrompt}
 
-    **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar maupun seluruh bagian LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
+    **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar maupun seluruh bagian LAMPIRAN (termasuk LKM dan Instrumen Asesmen), Anda HARUS menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
 
     **ATURAN POIN BULLET DAN NUMBERING:** Untuk semua poin bullet dan penomoran (\`<ul>\`, \`<ol>\`, \`<li>\`), atur indentasi menggunakan indent left 0 cm dan hanging by 0,63 cm (menggunakan \`style="margin-left: 0.63cm; text-indent: -0.63cm; padding-left: 0;"\` atau CSS list style terkait).
 
@@ -254,7 +254,7 @@ function createPrompt(data: RPMInput): string {
        - Durasi Pertemuan: ${meetings} x (2 x 40 menit)
 
     b. **IDENTIFIKASI**
-       - Siswa: ${studentDescription}
+       - Target Murid: ${studentDescription}
        - Materi Pelajaran: ${subjectMatter}
        - Capaian Dimensi Lulusan: ${graduateDimensions.join(', ')}
        - Topik Panca Cinta: Analisislah materi pelajaran dan tujuan pembelajaran untuk memilih 2-3 dimensi Kurikulum Berbasis Cinta (KBC) yang paling relevan dari daftar berikut: [Cinta Allah dan Rasul-Nya, Cinta Ilmu, Cinta Lingkungan, Cinta Diri dan Sesama, Cinta Tanah Air].
@@ -270,13 +270,13 @@ function createPrompt(data: RPMInput): string {
        - Pemanfaatan Digital: Generate saran tools digital relevan beserta tautan (contoh: Quizizz, Canva, YouTube).
 
     d. **PENGALAMAN BELAJAR**
-       - Memahami (berkesadaran, bermakna, menggembirakan): Generate langkah-langkah kegiatan awal. ${openingInstruction} Setelah menjelaskan tujuan, tambahkan satu paragraf singkat untuk membangun koneksi emosional siswa dengan mengaitkan materi pada salah satu nilai KBC (ingat untuk menerapkan penanda dan pewarnaan KBC sesuai instruksi di atas).
+       - Memahami (berkesadaran, bermakna, menggembirakan): Generate langkah-langkah kegiatan awal. ${openingInstruction} Setelah menjelaskan tujuan, tambahkan satu paragraf singkat untuk membangun koneksi emosional murid dengan mengaitkan materi pada salah satu nilai KBC (ingat untuk menerapkan penanda dan pewarnaan KBC sesuai instruksi di atas).
        - Mengaplikasi (berkesadaran, bermakna, menggembirakan): Generate langkah-langkah kegiatan inti detail untuk setiap pertemuan sesuai sintaks dari praktik pedagogis masing-masing (${practicesText}). Tambahkan instruksi spesifik untuk mendorong refleksi nilai KBC dalam aktivitas (ingat untuk menerapkan penanda dan pewarnaan KBC sesuai instruksi di atas).
        - Refleksi (berkesadaran, bermakna, menggembirakan): Generate langkah-langkah kegiatan penutup. ${closingInstruction}
 
     e. **ASESMEN PEMBELAJARAN**
        - Asesmen Awal (diagnostik/apersepsi): Jelaskan metode asesmen awal (misal: pertanyaan pemantik lisan, kuis singkat).
-       - Asesmen Formatif (for/as learning): Jelaskan metode asesmen formatif (misal: observasi partisipasi, penilaian LKPD, penilaian antar teman).
+       - Asesmen Formatif (for/as learning): Jelaskan metode asesmen formatif (misal: observasi partisipasi, penilaian LKM/LKPD, penilaian antar teman).
        - Asesmen Sumatif (of learning): Jelaskan metode asesmen sumatif (misal: tes tulis di akhir bab, penilaian proyek, presentasi).
 
     2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`). Semua teks di dalamnya rata kiri (\`text-align: left\`).
