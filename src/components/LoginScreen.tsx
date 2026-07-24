@@ -54,7 +54,7 @@ export const LoginScreen: React.FC = () => {
           <div className="text-center mb-6">
             <h2 className="text-xl font-bold text-slate-800">Masuk Akun Google</h2>
             <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-              Silakan masuk menggunakan akun Google Anda untuk mengakses Generator Rencana Pembelajaran Mendalam (RPM) Kurikulum Berbasis Cinta (KBC).
+              Silakan masuk menggunakan akun Google Anda.
             </p>
           </div>
 

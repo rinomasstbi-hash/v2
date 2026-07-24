@@ -91,34 +91,45 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
 
       // Custom Column Percentages/Widths for LKPD & Signature Tables
       if (table.classList.contains('lkpd-activity-table')) {
-        const cols = table.querySelectorAll('col');
-        if (cols.length >= 3) {
-          cols[0].setAttribute('style', 'width: 0.8cm !important; width: 22.68pt !important;');
-          cols[0].setAttribute('width', '22.68pt');
-          cols[1].setAttribute('style', 'width: 3.55cm !important; width: 100.63pt !important;');
-          cols[1].setAttribute('width', '100.63pt');
-          cols[2].setAttribute('style', 'width: 12.49cm !important; width: 354.05pt !important;');
-          cols[2].setAttribute('width', '354.05pt');
+        let tStyle = 'width: 16.84cm !important; width: 477.36pt !important; max-width: 16.84cm !important; min-width: 16.84cm !important; margin-left: auto !important; margin-right: auto !important; table-layout: fixed !important; border-collapse: collapse !important; word-wrap: break-word !important; overflow-wrap: break-word !important;';
+        if (isNoBorder) {
+          tStyle += ' border: none !important; margin-top: 15pt; margin-bottom: 15pt;';
+        } else {
+          tStyle += ' margin-top: 10pt; margin-bottom: 10pt;';
         }
-        // Force width 12.49cm (354.05pt) on EVERY single row in Column 3
+        table.setAttribute('style', tStyle);
+        table.setAttribute('width', '477');
+
+        let colgroup = table.querySelector('colgroup');
+        if (!colgroup) {
+          colgroup = doc.createElement('colgroup');
+          table.insertBefore(colgroup, table.firstChild);
+        }
+        colgroup.innerHTML = `
+          <col style="width: 0.8cm !important; width: 22.68pt !important; min-width: 0.8cm !important; max-width: 0.8cm !important;" width="23" />
+          <col style="width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important;" width="101" />
+          <col style="width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important;" width="354" />
+        `;
+
+        // Force fixed widths on EVERY row cell in LKPD Activity Table
         const rows = table.querySelectorAll('tr');
         rows.forEach(row => {
           const cells = row.querySelectorAll('th, td');
           if (cells.length >= 3) {
             let s0 = cells[0].getAttribute('style') || '';
             s0 = s0.replace(/width\s*:\s*[^;]+;?/gi, '');
-            cells[0].setAttribute('style', s0 + ' width: 0.8cm !important; width: 22.68pt !important; text-align: center !important;');
-            cells[0].setAttribute('width', '22.68pt');
+            cells[0].setAttribute('style', s0 + ' width: 0.8cm !important; width: 22.68pt !important; min-width: 0.8cm !important; max-width: 0.8cm !important; text-align: center !important;');
+            cells[0].setAttribute('width', '23');
 
             let s1 = cells[1].getAttribute('style') || '';
             s1 = s1.replace(/width\s*:\s*[^;]+;?/gi, '');
-            cells[1].setAttribute('style', s1 + ' width: 3.55cm !important; width: 100.63pt !important; text-align: left !important;');
-            cells[1].setAttribute('width', '100.63pt');
+            cells[1].setAttribute('style', s1 + ' width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important; text-align: left !important;');
+            cells[1].setAttribute('width', '101');
 
             let s2 = cells[2].getAttribute('style') || '';
             s2 = s2.replace(/width\s*:\s*[^;]+;?/gi, '');
-            cells[2].setAttribute('style', s2 + ' width: 12.49cm !important; width: 354.05pt !important; text-align: left !important; word-break: break-word !important;');
-            cells[2].setAttribute('width', '354.05pt');
+            cells[2].setAttribute('style', s2 + ' width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important;');
+            cells[2].setAttribute('width', '354');
           }
         });
       } else if (table.classList.contains('lkpd-identity-table')) {
@@ -157,7 +168,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       }
     });
 
-    // 2. Fix bullet and numbered lists across the entire document (ensure bullets/numbers are ALWAYS visible & compact)
+    // 2. Fix bullet and numbered lists across the entire document (ensure 0pt left indent for paragraph & bullet/numbering)
     const allLists = doc.querySelectorAll('ul, ol');
     allLists.forEach(list => {
       const isOrdered = list.tagName.toLowerCase() === 'ol';
@@ -165,13 +176,13 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       
       listStyle = listStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
       listStyle = listStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
+      listStyle = listStyle.replace(/text-indent\s*:\s*[^;]+;?/gi, '');
       listStyle = listStyle.replace(/list-style(-type)?\s*:\s*[^;]+;?/gi, '');
       listStyle = listStyle.replace(/list-style-position\s*:\s*[^;]+;?/gi, '');
 
       const styleType = isOrdered ? 'decimal' : 'disc';
-      const padLeft = isOrdered ? '16pt' : '14pt';
 
-      listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: ${padLeft} !important; margin-left: 0pt !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
+      listStyle += ` list-style-type: ${styleType} !important; list-style-position: inside !important; padding-left: 0pt !important; margin-left: 0pt !important; text-indent: 0pt !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
       list.setAttribute('style', listStyle);
 
       const items = list.querySelectorAll('li');
@@ -179,9 +190,20 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
         let liStyle = li.getAttribute('style') || '';
         liStyle = liStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
+        liStyle = liStyle.replace(/text-indent\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/list-style(-type)?\s*:\s*[^;]+;?/gi, '');
-        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0pt !important; padding-left: 0pt !important; margin-bottom: 2pt !important; text-align: left !important;`;
+        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0pt !important; padding-left: 0pt !important; text-indent: 0pt !important; margin-bottom: 2pt !important; text-align: left !important;`;
         li.setAttribute('style', liStyle);
+
+        const innerParas = li.querySelectorAll('p');
+        innerParas.forEach(p => {
+          let pStyle = p.getAttribute('style') || '';
+          pStyle = pStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
+          pStyle = pStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
+          pStyle = pStyle.replace(/text-indent\s*:\s*[^;]+;?/gi, '');
+          pStyle += ` margin-left: 0pt !important; padding-left: 0pt !important; text-indent: 0pt !important;`;
+          p.setAttribute('style', pStyle);
+        });
       });
     });
 
@@ -302,7 +324,6 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 }
                 /* All LKPD and Lampiran Tables locked to 100% fit */
                 table.lkpd-identity-table,
-                table.lkpd-activity-table,
                 table.lkpd-checklist-table,
                 .lampiran-section table {
                   width: 100% !important;
@@ -311,15 +332,24 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   margin-right: auto !important;
                   table-layout: fixed !important;
                 }
+                table.lkpd-activity-table {
+                  width: 16.84cm !important;
+                  width: 477.36pt !important;
+                  max-width: 16.84cm !important;
+                  min-width: 16.84cm !important;
+                  margin-left: auto !important;
+                  margin-right: auto !important;
+                  table-layout: fixed !important;
+                }
                 table.lkpd-activity-table col:nth-child(1),
                 table.lkpd-activity-table th:nth-child(1),
-                table.lkpd-activity-table td:nth-child(1) { width: 22.68pt !important; text-align: center !important; }
+                table.lkpd-activity-table td:nth-child(1) { width: 0.8cm !important; width: 22.68pt !important; min-width: 0.8cm !important; max-width: 0.8cm !important; text-align: center !important; }
                 table.lkpd-activity-table col:nth-child(2),
                 table.lkpd-activity-table th:nth-child(2),
-                table.lkpd-activity-table td:nth-child(2) { width: 100.63pt !important; text-align: left !important; }
+                table.lkpd-activity-table td:nth-child(2) { width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important; text-align: left !important; }
                 table.lkpd-activity-table col:nth-child(3),
                 table.lkpd-activity-table th:nth-child(3),
-                table.lkpd-activity-table td:nth-child(3) { width: 354.05pt !important; text-align: left !important; }
+                table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important; }
 
                 /* Signature Table Centering & Width */
                 table.signature-table { 
@@ -346,48 +376,59 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 /* Compact Bullets / Lists (Flush left with 0pt indentation) */
                 ul {
                   list-style-type: disc !important;
-                  list-style-position: outside !important;
+                  list-style-position: inside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 14pt !important;
+                  padding-left: 0pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                 }
                 ol {
                   list-style-type: decimal !important;
-                  list-style-position: outside !important;
+                  list-style-position: inside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 16pt !important;
+                  padding-left: 0pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                 }
                 li {
                   list-style-type: inherit !important;
                   margin-bottom: 2pt !important;
                   padding-left: 0pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                   text-align: left !important;
                   word-wrap: break-word !important;
                 }
                 table ul, td ul, th ul, .lampiran-section ul {
                   list-style-type: disc !important;
-                  list-style-position: outside !important;
-                  padding-left: 14pt !important;
+                  list-style-position: inside !important;
+                  padding-left: 0pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                 }
                 table ol, td ol, th ol, .lampiran-section ol {
                   list-style-type: decimal !important;
-                  list-style-position: outside !important;
-                  padding-left: 16pt !important;
+                  list-style-position: inside !important;
+                  padding-left: 0pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                 }
                 ul ul, ol ul {
                   list-style-type: circle !important;
-                  padding-left: 12pt !important;
+                  list-style-position: inside !important;
+                  padding-left: 8pt !important;
                   margin-left: 0pt !important;
+                  text-indent: 0pt !important;
                 }
                 ul ol, ol ol {
                   list-style-type: lower-alpha !important;
-                  padding-left: 14pt !important;
+                  list-style-position: inside !important;
+                  padding-left: 8pt !important;
+                  margin-left: 0pt !important;
+                  text-indent: 0pt !important;
+                }
                   margin-left: 0pt !important;
                 }
                 p { 
@@ -512,9 +553,8 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 overflow-wrap: break-word !important;
               }
 
-              /* --- LKPD Specific Column Widths (100% Fit) --- */
+              /* --- LKPD Specific Column Widths (Fixed 12.49cm Col 3) --- */
               table.lkpd-identity-table,
-              table.lkpd-activity-table,
               table.lkpd-checklist-table,
               .lampiran-section table {
                 width: 100% !important;
@@ -523,23 +563,43 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 margin-right: auto !important;
                 table-layout: fixed !important;
               }
+              table.lkpd-activity-table {
+                width: 16.84cm !important;
+                width: 477.36pt !important;
+                max-width: 16.84cm !important;
+                min-width: 16.84cm !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                table-layout: fixed !important;
+              }
               table.lkpd-activity-table col:nth-child(1),
               table.lkpd-activity-table th:nth-child(1),
               table.lkpd-activity-table td:nth-child(1) {
+                width: 0.8cm !important;
                 width: 22.68pt !important;
+                min-width: 0.8cm !important;
+                max-width: 0.8cm !important;
                 text-align: center !important;
               }
               table.lkpd-activity-table col:nth-child(2),
               table.lkpd-activity-table th:nth-child(2),
               table.lkpd-activity-table td:nth-child(2) {
+                width: 3.55cm !important;
                 width: 100.63pt !important;
+                min-width: 3.55cm !important;
+                max-width: 3.55cm !important;
                 text-align: left !important;
               }
               table.lkpd-activity-table col:nth-child(3),
               table.lkpd-activity-table th:nth-child(3),
               table.lkpd-activity-table td:nth-child(3) {
+                width: 12.49cm !important;
                 width: 354.05pt !important;
+                min-width: 12.49cm !important;
+                max-width: 12.49cm !important;
                 text-align: left !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
               }
 
               /* --- Signature Table Styles --- */
@@ -575,38 +635,59 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               /* --- Bullet lists & Numbering (Flush left with 0pt indentation) --- */
               ul {
                 list-style-type: disc !important;
-                list-style-position: outside !important;
+                list-style-position: inside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 14pt !important;
+                padding-left: 0pt !important;
                 margin-left: 0pt !important;
+                text-indent: 0pt !important;
               }
               ol {
                 list-style-type: decimal !important;
-                list-style-position: outside !important;
+                list-style-position: inside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 16pt !important;
+                padding-left: 0pt !important;
                 margin-left: 0pt !important;
+                text-indent: 0pt !important;
               }
               li {
                 list-style-type: inherit !important;
                 margin-bottom: 2pt !important;
                 padding-left: 0pt !important;
                 margin-left: 0pt !important;
+                text-indent: 0pt !important;
                 text-align: left !important;
                 word-wrap: break-word !important;
               }
               table ul, td ul, th ul, .lampiran-section ul {
                 list-style-type: disc !important;
-                list-style-position: outside !important;
-                padding-left: 14pt !important;
+                list-style-position: inside !important;
+                padding-left: 0pt !important;
                 margin-left: 0pt !important;
+                text-indent: 0pt !important;
               }
               table ol, td ol, th ol, .lampiran-section ol {
                 list-style-type: decimal !important;
-                list-style-position: outside !important;
-                padding-left: 16pt !important;
+                list-style-position: inside !important;
+                padding-left: 0pt !important;
+                margin-left: 0pt !important;
+                text-indent: 0pt !important;
+              }
+              ul ul, ol ul {
+                list-style-type: circle !important;
+                list-style-position: inside !important;
+                padding-left: 8pt !important;
+                margin-left: 0pt !important;
+                text-indent: 0pt !important;
+              }
+              ul ol, ol ol {
+                list-style-type: lower-alpha !important;
+                list-style-position: inside !important;
+                padding-left: 8pt !important;
+                margin-left: 0pt !important;
+                text-indent: 0pt !important;
+              }
                 margin-left: 0pt !important;
               }
               ul ul, ol ul {
@@ -788,7 +869,6 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             overflow-wrap: break-word !important;
           }
           #printable-area table.lkpd-identity-table,
-          #printable-area table.lkpd-activity-table,
           #printable-area table.lkpd-checklist-table,
           #printable-area .lampiran-section table {
             width: 100% !important;
@@ -797,15 +877,24 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             margin-right: auto !important;
             table-layout: fixed !important;
           }
+          #printable-area table.lkpd-activity-table {
+            width: 16.84cm !important;
+            width: 477.36pt !important;
+            max-width: 16.84cm !important;
+            min-width: 16.84cm !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            table-layout: fixed !important;
+          }
           #printable-area table.lkpd-activity-table col:nth-child(1),
           #printable-area table.lkpd-activity-table th:nth-child(1),
-          #printable-area table.lkpd-activity-table td:nth-child(1) { width: 22.68pt !important; text-align: center !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(1) { width: 0.8cm !important; width: 22.68pt !important; min-width: 0.8cm !important; max-width: 0.8cm !important; text-align: center !important; }
           #printable-area table.lkpd-activity-table col:nth-child(2),
           #printable-area table.lkpd-activity-table th:nth-child(2),
-          #printable-area table.lkpd-activity-table td:nth-child(2) { width: 100.63pt !important; text-align: left !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(2) { width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important; text-align: left !important; }
           #printable-area table.lkpd-activity-table col:nth-child(3),
           #printable-area table.lkpd-activity-table th:nth-child(3),
-          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 354.05pt !important; text-align: left !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important; }
 
           #printable-area table.signature-table {
             table-layout: fixed !important;
@@ -830,43 +919,52 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
 
           #printable-area ul {
             list-style-type: disc !important;
-            list-style-position: outside !important;
+            list-style-position: inside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 14pt !important;
+            padding-left: 0pt !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
           }
           #printable-area ol {
             list-style-type: decimal !important;
-            list-style-position: outside !important;
+            list-style-position: inside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 16pt !important;
+            padding-left: 0pt !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
           }
           #printable-area li {
             list-style-type: inherit !important;
             margin-bottom: 2pt !important;
             padding-left: 0pt !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
             text-align: left !important;
             word-wrap: break-word !important;
           }
           #printable-area table ul, #printable-area td ul, #printable-area th ul, #printable-area .lampiran-section ul {
             list-style-type: disc !important;
-            list-style-position: outside !important;
-            padding-left: 14pt !important;
+            list-style-position: inside !important;
+            padding-left: 0pt !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
           }
           #printable-area table ol, #printable-area td ol, #printable-area th ol, #printable-area .lampiran-section ol {
             list-style-type: decimal !important;
-            list-style-position: outside !important;
-            padding-left: 16pt !important;
+            list-style-position: inside !important;
+            padding-left: 0pt !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
           }
           #printable-area ul ul, #printable-area ol ul {
             list-style-type: circle !important;
-            padding-left: 12pt !important;
+            list-style-position: inside !important;
+            padding-left: 8pt !important;
+            margin-left: 0pt !important;
+            text-indent: 0pt !important;
+          }
             margin-left: 0pt !important;
           }
           #printable-area ul ol, #printable-area ol ol {
