@@ -65,11 +65,35 @@ export const loginWithGoogle = async () => {
 
 export const logoutUser = async () => {
   try {
+    localStorage.removeItem('local_session_user');
     await signOut(auth);
   } catch (error) {
     console.error("Error signing out:", error);
-    throw error;
   }
+  window.location.reload();
+};
+
+export const loginAsLocalUser = (role: 'admin' | 'user' = 'admin', email = 'rinomasstbi@gmail.com', name = 'Rino Masstbi (Admin)') => {
+  const localUser: UserProfile = {
+    uid: 'local_' + (role === 'admin' ? 'admin' : 'user') + '_' + Date.now(),
+    email: email,
+    displayName: name,
+    role: role,
+    createdAt: new Date().toISOString(),
+    lastLoginAt: new Date().toISOString()
+  };
+  localStorage.setItem('local_session_user', JSON.stringify(localUser));
+  window.location.reload();
+};
+
+export const getLocalSessionUser = (): UserProfile | null => {
+  try {
+    const saved = localStorage.getItem('local_session_user');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.warn("Gagal membaca local_session_user:", e);
+  }
+  return null;
 };
 
 export const syncUserProfile = async (user: User): Promise<UserProfile> => {

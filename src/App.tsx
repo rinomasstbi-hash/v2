@@ -10,7 +10,7 @@ import { HistoryModal } from './components/HistoryModal';
 import type { RPMInput, UserProfile } from './types';
 import { generateRPM, MISSING_API_KEY_ERROR } from './services/geminiService';
 import { Notification } from './components/Notification';
-import { auth, onAuthStateChanged, syncUserProfile } from './lib/firebase';
+import { auth, onAuthStateChanged, syncUserProfile, getLocalSessionUser } from './lib/firebase';
 import { saveRpmHistory } from './services/apiKeyService';
 
 const loadingMessages = [
@@ -93,6 +93,13 @@ const App: React.FC = () => {
 
   // Listen to Auth State
   useEffect(() => {
+    const localUser = getLocalSessionUser();
+    if (localUser) {
+      setUser(localUser);
+      setIsAuthChecking(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         try {
