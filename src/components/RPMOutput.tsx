@@ -128,7 +128,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
 
             let s2 = cells[2].getAttribute('style') || '';
             s2 = s2.replace(/width\s*:\s*[^;]+;?/gi, '');
-            cells[2].setAttribute('style', s2 + ' width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important;');
+            cells[2].setAttribute('style', s2 + ' width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-all !important; overflow-wrap: anywhere !important; word-wrap: break-word !important; white-space: normal !important;');
             cells[2].setAttribute('width', '354');
           }
         });
@@ -168,7 +168,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       }
     });
 
-    // 2. Fix bullet and numbered lists across the entire document (ensure 0pt left indent for paragraph & bullet/numbering)
+    // 2. Fix bullet and numbered lists across the entire document (ensure hanging indent by 0.63cm)
     const allLists = doc.querySelectorAll('ul, ol');
     allLists.forEach(list => {
       const isOrdered = list.tagName.toLowerCase() === 'ol';
@@ -182,7 +182,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
 
       const styleType = isOrdered ? 'decimal' : 'disc';
 
-      listStyle += ` list-style-type: ${styleType} !important; list-style-position: inside !important; padding-left: 0pt !important; margin-left: 0pt !important; text-indent: 0pt !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
+      listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: 0.63cm !important; margin-left: 0pt !important; text-indent: 0pt !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
       list.setAttribute('style', listStyle);
 
       const items = list.querySelectorAll('li');
@@ -192,7 +192,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
         liStyle = liStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/text-indent\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/list-style(-type)?\s*:\s*[^;]+;?/gi, '');
-        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0pt !important; padding-left: 0pt !important; text-indent: 0pt !important; margin-bottom: 2pt !important; text-align: left !important;`;
+        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0pt !important; padding-left: 0pt !important; text-indent: 0pt !important; margin-bottom: 2pt !important; text-align: left !important; word-break: break-word !important; overflow-wrap: anywhere !important;`;
         li.setAttribute('style', liStyle);
 
         const innerParas = li.querySelectorAll('p');
@@ -207,15 +207,14 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       });
     });
 
-    // 3. Prevent long unbroken strings of dots/underscores from expanding table cells beyond page width
+    // 3. Prevent long unbroken strings of dots/underscores/dashes from expanding table cells beyond page width (12.49cm)
     const allElements = doc.querySelectorAll('td, th, p, div, span, li');
     allElements.forEach(el => {
-      if (el.children.length === 0 && el.textContent) {
-        if (/(\.{10,}|_{10,})/.test(el.textContent)) {
-          el.innerHTML = el.innerHTML.replace(/(\.{10,}|_{10,})/g, (match) => {
-            return match.split('').join(' ');
-          });
-        }
+      if (el.innerHTML && /(\.{3,}|_{3,}|-{3,})/.test(el.innerHTML)) {
+        el.innerHTML = el.innerHTML
+          .replace(/\.{3,}/g, (match) => match.split('').join(' '))
+          .replace(/_{3,}/g, (match) => match.split('').join(' '))
+          .replace(/-{3,}/g, (match) => match.split('').join(' '));
       }
     });
 
@@ -349,7 +348,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.lkpd-activity-table td:nth-child(2) { width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important; text-align: left !important; }
                 table.lkpd-activity-table col:nth-child(3),
                 table.lkpd-activity-table th:nth-child(3),
-                table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important; }
+                table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-all !important; overflow-wrap: anywhere !important; word-wrap: break-word !important; white-space: normal !important; }
 
                 /* Signature Table Centering & Width */
                 table.signature-table { 
@@ -373,22 +372,22 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.signature-table td:first-child, table.signature-table td.col-kepala { width: 50% !important; text-align: left !important; border: none !important; }
                 table.signature-table td:last-child, table.signature-table td.col-guru { width: 50% !important; text-align: left !important; border: none !important; }
                 
-                /* Compact Bullets / Lists (Flush left with 0pt indentation) */
+                /* Bullets & Numbered Lists - Special Hanging 0.63cm */
                 ul {
                   list-style-type: disc !important;
-                  list-style-position: inside !important;
+                  list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 0pt !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                 }
                 ol {
                   list-style-type: decimal !important;
-                  list-style-position: inside !important;
+                  list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 0pt !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                 }
@@ -399,37 +398,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                   text-align: left !important;
-                  word-wrap: break-word !important;
+                  word-break: break-word !important;
+                  overflow-wrap: anywhere !important;
                 }
                 table ul, td ul, th ul, .lampiran-section ul {
                   list-style-type: disc !important;
-                  list-style-position: inside !important;
-                  padding-left: 0pt !important;
+                  list-style-position: outside !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                 }
                 table ol, td ol, th ol, .lampiran-section ol {
                   list-style-type: decimal !important;
-                  list-style-position: inside !important;
-                  padding-left: 0pt !important;
+                  list-style-position: outside !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                 }
                 ul ul, ol ul {
                   list-style-type: circle !important;
-                  list-style-position: inside !important;
-                  padding-left: 8pt !important;
+                  list-style-position: outside !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
                 }
                 ul ol, ol ol {
                   list-style-type: lower-alpha !important;
-                  list-style-position: inside !important;
-                  padding-left: 8pt !important;
+                  list-style-position: outside !important;
+                  padding-left: 0.63cm !important;
                   margin-left: 0pt !important;
                   text-indent: 0pt !important;
-                }
-                  margin-left: 0pt !important;
                 }
                 p { 
                   margin-top: 0; 
@@ -598,8 +596,10 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 min-width: 12.49cm !important;
                 max-width: 12.49cm !important;
                 text-align: left !important;
-                word-break: break-word !important;
-                overflow-wrap: break-word !important;
+                word-break: break-all !important;
+                overflow-wrap: anywhere !important;
+                word-wrap: break-word !important;
+                white-space: normal !important;
               }
 
               /* --- Signature Table Styles --- */
@@ -632,22 +632,22 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 border: none !important;
               }
               
-              /* --- Bullet lists & Numbering (Flush left with 0pt indentation) --- */
+              /* --- Bullet lists & Numbering (Hanging 0.63cm) --- */
               ul {
                 list-style-type: disc !important;
-                list-style-position: inside !important;
+                list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 0pt !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
               }
               ol {
                 list-style-type: decimal !important;
-                list-style-position: inside !important;
+                list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 0pt !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
               }
@@ -658,47 +658,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
                 text-align: left !important;
-                word-wrap: break-word !important;
+                word-break: break-word !important;
+                overflow-wrap: anywhere !important;
               }
               table ul, td ul, th ul, .lampiran-section ul {
                 list-style-type: disc !important;
-                list-style-position: inside !important;
-                padding-left: 0pt !important;
+                list-style-position: outside !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
               }
               table ol, td ol, th ol, .lampiran-section ol {
                 list-style-type: decimal !important;
-                list-style-position: inside !important;
-                padding-left: 0pt !important;
+                list-style-position: outside !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
               }
               ul ul, ol ul {
                 list-style-type: circle !important;
-                list-style-position: inside !important;
-                padding-left: 8pt !important;
+                list-style-position: outside !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
               }
               ul ol, ol ol {
                 list-style-type: lower-alpha !important;
-                list-style-position: inside !important;
-                padding-left: 8pt !important;
+                list-style-position: outside !important;
+                padding-left: 0.63cm !important;
                 margin-left: 0pt !important;
                 text-indent: 0pt !important;
-              }
-                margin-left: 0pt !important;
-              }
-              ul ul, ol ul {
-                list-style-type: circle !important;
-                padding-left: 12pt !important;
-                margin-left: 0pt !important;
-              }
-              ul ol, ol ol {
-                list-style-type: lower-alpha !important;
-                padding-left: 14pt !important;
-                margin-left: 0pt !important;
               }
 
               /* --- Text Formatting Styles --- */
@@ -894,7 +883,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           #printable-area table.lkpd-activity-table td:nth-child(2) { width: 3.55cm !important; width: 100.63pt !important; min-width: 3.55cm !important; max-width: 3.55cm !important; text-align: left !important; }
           #printable-area table.lkpd-activity-table col:nth-child(3),
           #printable-area table.lkpd-activity-table th:nth-child(3),
-          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-word !important; overflow-wrap: break-word !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 12.49cm !important; width: 354.05pt !important; min-width: 12.49cm !important; max-width: 12.49cm !important; text-align: left !important; word-break: break-all !important; overflow-wrap: anywhere !important; word-wrap: break-word !important; white-space: normal !important; }
 
           #printable-area table.signature-table {
             table-layout: fixed !important;
@@ -919,19 +908,19 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
 
           #printable-area ul {
             list-style-type: disc !important;
-            list-style-position: inside !important;
+            list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 0pt !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
             text-indent: 0pt !important;
           }
           #printable-area ol {
             list-style-type: decimal !important;
-            list-style-position: inside !important;
+            list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 0pt !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
             text-indent: 0pt !important;
           }
@@ -942,35 +931,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             margin-left: 0pt !important;
             text-indent: 0pt !important;
             text-align: left !important;
-            word-wrap: break-word !important;
+            word-break: break-word !important;
+            overflow-wrap: anywhere !important;
           }
           #printable-area table ul, #printable-area td ul, #printable-area th ul, #printable-area .lampiran-section ul {
             list-style-type: disc !important;
-            list-style-position: inside !important;
-            padding-left: 0pt !important;
+            list-style-position: outside !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
             text-indent: 0pt !important;
           }
           #printable-area table ol, #printable-area td ol, #printable-area th ol, #printable-area .lampiran-section ol {
             list-style-type: decimal !important;
-            list-style-position: inside !important;
-            padding-left: 0pt !important;
+            list-style-position: outside !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
             text-indent: 0pt !important;
           }
           #printable-area ul ul, #printable-area ol ul {
             list-style-type: circle !important;
-            list-style-position: inside !important;
-            padding-left: 8pt !important;
+            list-style-position: outside !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
             text-indent: 0pt !important;
           }
-            margin-left: 0pt !important;
-          }
           #printable-area ul ol, #printable-area ol ol {
             list-style-type: lower-alpha !important;
-            padding-left: 14pt !important;
+            list-style-position: outside !important;
+            padding-left: 0.63cm !important;
             margin-left: 0pt !important;
+            text-indent: 0pt !important;
           }
           #printable-area p {
             margin-top: 0;

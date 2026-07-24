@@ -290,17 +290,17 @@ function createPrompt(data: RPMInput): string {
     - Pada Tabel LKPD Tahapan Pedagogis (3 kolom, \`class="lkpd-activity-table"\`):
       1. Kolom 1 (No): \`width="0.8cm"\` (22.68pt)
       2. Kolom 2 (Tahapan Sintaks): \`width="3.55cm"\` (100.63pt)
-      3. Kolom 3 (Kegiatan & Tugas Peserta Didik): \`width="12.49cm"\` (354.05pt) - SANGAT PENTING: Lebar Kolom 3 DILOCK DENGAN TEPAT 12,49 cm dan DILARANG AUTO FIT! Total lebar tabel 16,84 cm (477,36 pt).
+      3. Kolom 3 (Kegiatan & Tugas Peserta Didik): \`width="12.49cm"\` (354.05pt) - SANGAT PENTING: Lebar Kolom 3 DILOCK DENGAN TEPAT 12,49 cm dan DILARANG MELEBIHI HALAMAN! Jika membuat lembar titik-titik jawaban (answer line), GUNAKAN SPASI di antara titik-titik (misal: \`. . . . . . . . . .\`) agar teks tidak berupa string tanpa putus yang melebar menembus batas halaman.
     - Pada Tabel LKPD Identitas: Kolom 1 \`width="50%"\`, Kolom 2 \`width="50%"\`.
     - Pada Tabel Asesmen & Rubrik lainnya, pastikan total penjumlahan seluruh lebar kolom selalu pas dengan lebar margin kertas.
 
-    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (INDENTASI 0 PT - SANGAT PENTING):**
+    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (SPESIAL HANGING BY 0,63 CM - SANGAT PENTING):**
     - Setiap kali membuat daftar poin (\`<ul><li>\`) atau penomoran (\`<ol><li>\`) di bagian RPM maupun Lampiran, gunakan tag HTML \`<ul>\` atau \`<ol>\` standar tanpa menambah simbol manual seperti \`-\` atau \`•\`.
-    - Atur seluruh daftar bullet dan penomoran agar MEMILIKI INDENTASI KIRI TEPAT 0 PT (\`0pt left indent\`):
-      - Untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: inside; padding-left: 0pt; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
-      - Untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: inside; padding-left: 0pt; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
+    - Atur seluruh daftar bullet dan penomoran agar MEMILIKI INDENTASI HANGING TEPAT 0,63 CM (\`hanging by 0.63cm\`):
+      - Untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: outside; padding-left: 0.63cm; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
+      - Untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: outside; padding-left: 0.63cm; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
       - Untuk \`<li>\` disetel \`style="margin-left: 0pt; padding-left: 0pt; text-indent: 0pt; margin-bottom: 2pt;"\`
-    - DILARANG KERAS menggunakan padding/margin kiri besar (seperti 40px, 20pt) atau tabulasi spasi berlebihan agar poin bullet dan angka tetap SELALU MUNCUL DENGAN JELAS, rata kiri 0pt sejajar dengan paragraf.
+    - DILARANG KERAS menggunakan padding/margin kiri sembarangan agar poin bullet dan angka SELALU MUNCUL DENGAN JELAS, rapi hanging by 0,63 cm.
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
