@@ -20,15 +20,39 @@ export const CustomFirebaseModal: React.FC<CustomFirebaseModalProps> = ({ isOpen
 
     try {
       let parsed: any;
-      if (jsonInput.trim().startsWith('{')) {
-        parsed = JSON.parse(jsonInput);
-      } else {
-        // Try to construct object if key-value pairs or JS object snippet
-        throw new Error("Format JSON tidak valid. Harap masukkan Objek JSON config Firebase yang valid.");
+      const trimmed = jsonInput.trim();
+
+      if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+        try {
+          parsed = JSON.parse(trimmed);
+        } catch {
+          // If pure JSON parse fails, try extracting key-values via regex below
+        }
       }
 
-      if (!parsed.apiKey || !parsed.projectId) {
-        throw new Error("JSON harus memiliki minimal properti 'apiKey' dan 'projectId'.");
+      if (!parsed) {
+        // Extract key: "value" or key: 'value' or "key": "value" using regex
+        const apiKeyMatch = trimmed.match(/["']?apiKey["']?\s*:\s*["']([^"']+)["']/);
+        const authDomainMatch = trimmed.match(/["']?authDomain["']?\s*:\s*["']([^"']+)["']/);
+        const projectIdMatch = trimmed.match(/["']?projectId["']?\s*:\s*["']([^"']+)["']/);
+        const storageBucketMatch = trimmed.match(/["']?storageBucket["']?\s*:\s*["']([^"']+)["']/);
+        const messagingSenderIdMatch = trimmed.match(/["']?messagingSenderId["']?\s*:\s*["']([^"']+)["']/);
+        const appIdMatch = trimmed.match(/["']?appId["']?\s*:\s*["']([^"']+)["']/);
+
+        if (apiKeyMatch && projectIdMatch) {
+          parsed = {
+            apiKey: apiKeyMatch[1],
+            authDomain: authDomainMatch ? authDomainMatch[1] : undefined,
+            projectId: projectIdMatch[1],
+            storageBucket: storageBucketMatch ? storageBucketMatch[1] : undefined,
+            messagingSenderId: messagingSenderIdMatch ? messagingSenderIdMatch[1] : undefined,
+            appId: appIdMatch ? appIdMatch[1] : undefined
+          };
+        }
+      }
+
+      if (!parsed || !parsed.apiKey || !parsed.projectId) {
+        throw new Error("Tidak dapat menemukan 'apiKey' dan 'projectId'. Pastikan Anda menempelkan seluruh teks firebaseConfig yang disalin dari Firebase Console.");
       }
 
       saveCustomFirebaseConfig(parsed);
@@ -87,16 +111,19 @@ export const CustomFirebaseModal: React.FC<CustomFirebaseModalProps> = ({ isOpen
           <form onSubmit={handleSave} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Tempel JSON Config Firebase Pribadi
+                Tempelkan Teks <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-cyan-800">firebaseConfig</code> dari Firebase Console
               </label>
               <textarea
                 rows={7}
-                placeholder={`{\n  "apiKey": "AIzaSy...",\n  "authDomain": "proyek-saya.firebaseapp.com",\n  "projectId": "proyek-saya",\n  "storageBucket": "proyek-saya.appspot.com",\n  "messagingSenderId": "123456789",\n  "appId": "1:123456789:web:abc123"\n}`}
+                placeholder={`const firebaseConfig = {\n  apiKey: "AIzaSy...",\n  authDomain: "proyek-saya.firebaseapp.com",\n  projectId: "proyek-saya",\n  storageBucket: "proyek-saya.appspot.com",\n  messagingSenderId: "123456789",\n  appId: "1:123456789:web:abc123"\n};`}
                 value={jsonInput}
                 onChange={(e) => setJsonInput(e.target.value)}
                 required
                 className="w-full p-3 border border-slate-300 rounded-xl font-mono text-xs bg-slate-50 focus:bg-white focus:ring-2 focus:ring-cyan-500"
               />
+              <p className="text-[11px] text-slate-500 mt-1">
+                💡 Anda bisa langsung menempelkan seluruh kode <code className="bg-slate-100 px-1 py-0.5 rounded font-mono">const firebaseConfig = &#123; ... &#125;;</code> tanpa perlu mengubahnya manual!
+              </p>
             </div>
 
             <div className="flex justify-between items-center text-xs">
