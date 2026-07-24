@@ -63,6 +63,30 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
   const [copyButtonText, setCopyButtonText] = useState('Salin & Buka di Google Dokumen');
   const [isCopying, setIsCopying] = useState(false);
 
+  const formatSignatureTable = useCallback((html: string): string => {
+    if (!html) return html;
+    return html.replace(/<table[^>]*>([\s\S]*?)<\/table>/gi, (match, innerContent) => {
+      if (
+        innerContent.includes('Mengetahui') ||
+        innerContent.includes('Guru Mata Pelajaran') ||
+        innerContent.includes('Kepala MTsN')
+      ) {
+        let rebuiltContent = innerContent.replace(/<td[^>]*>([\s\S]*?)<\/td>/gi, (tdMatch, tdInner) => {
+          const cleanedInner = tdInner.replace(/text-align:\s*center/gi, 'text-align: left');
+          if (cleanedInner.includes('Mengetahui') || cleanedInner.includes('Kepala')) {
+            return `<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">${cleanedInner}</td>`;
+          } else if (cleanedInner.includes('Guru Mata Pelajaran') || cleanedInner.includes('Jombang,')) {
+            return `<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">${cleanedInner}</td>`;
+          }
+          return tdMatch;
+        });
+
+        return `<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">${rebuiltContent}</table>`;
+      }
+      return match;
+    });
+  }, []);
+
   const processedHtml = useMemo(() => {
     if (!htmlContent) return '';
     let processed = htmlContent;
@@ -84,8 +108,11 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
       `
     );
 
+    // 3. Format Signature Table
+    processed = formatSignatureTable(processed);
+
     return processed;
-  }, [htmlContent]);
+  }, [htmlContent, formatSignatureTable]);
 
 
   const handleCopyToGoogleDocs = useCallback(() => {
@@ -115,8 +142,41 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   line-height: 1.5;
                 }
                 table { border-collapse: collapse; width: 100%; }
+                table.signature-table {
+                  table-layout: fixed !important;
+                  width: 100% !important;
+                  border: none !important;
+                  border-collapse: collapse !important;
+                  margin-top: 0 !important;
+                }
                 td, th { vertical-align: top; padding: 8px; text-align: justify; text-justify: inter-word; }
-                p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; }
+                table.signature-table td {
+                  border: none !important;
+                  text-align: left !important;
+                  text-justify: auto !important;
+                  padding: 0 !important;
+                  vertical-align: top !important;
+                }
+                table.signature-table td.col-left {
+                  width: 566.9pt !important;
+                }
+                table.signature-table td.col-right {
+                  width: 170.07pt !important;
+                }
+                p { text-align: justify; text-justify: inter-word; line-height: 1.5; margin-top: 0; margin-bottom: 0.5em; }
+                ul, ol {
+                  margin-top: 0;
+                  margin-bottom: 0.5em;
+                  margin-left: 0.63cm;
+                  padding-left: 0;
+                }
+                li {
+                  margin-bottom: 0.2em;
+                  margin-left: 0;
+                  text-indent: -0.63cm;
+                  text-align: justify;
+                  text-justify: inter-word;
+                }
                 .page-break { page-break-before: always; }
             </style>
           </head>
@@ -204,12 +264,32 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               
               /* --- Table Styles --- */
               table { border-collapse: collapse; width: 100%; }
+              table.signature-table {
+                table-layout: fixed !important;
+                width: 100% !important;
+                border: none !important;
+                border-collapse: collapse !important;
+                margin-top: 0 !important;
+              }
               td, th { 
                 vertical-align: top; 
                 padding: 8px; 
                 border: 1px solid #000; 
                 text-align: justify; /* Rata kanan-kiri */
                 text-justify: inter-word;
+              }
+              table.signature-table td {
+                border: none !important;
+                text-align: left !important;
+                text-justify: auto !important;
+                padding: 0 !important;
+                vertical-align: top !important;
+              }
+              table.signature-table td.col-left {
+                width: 566.9pt !important;
+              }
+              table.signature-table td.col-right {
+                width: 170.07pt !important;
               }
               
               /* --- Text Formatting Styles --- */
@@ -228,10 +308,13 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               ul, ol {
                 margin-top: 0;
                 margin-bottom: 0.5em;
-                padding-left: 40px; 
+                margin-left: 0.63cm;
+                padding-left: 0;
               }
               li {
-                margin-bottom: 0.2em; 
+                margin-bottom: 0.2em;
+                margin-left: 0;
+                text-indent: -0.63cm;
                 text-align: justify; /* Rata kanan-kiri untuk daftar */
                 text-justify: inter-word;
               }

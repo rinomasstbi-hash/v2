@@ -216,6 +216,16 @@ function createPrompt(data: RPMInput): string {
 
     **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar maupun seluruh bagian LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
 
+    **ATURAN POIN BULLET DAN NUMBERING:** Untuk semua poin bullet dan penomoran (\`<ul>\`, \`<ol>\`, \`<li>\`), atur indentasi menggunakan indent left 0 cm dan hanging by 0,63 cm (menggunakan \`style="margin-left: 0.63cm; text-indent: -0.63cm; padding-left: 0;"\` atau CSS list style terkait).
+
+    **ATURAN TABEL TANDA TANGAN (PRESISI & FIXED LAYOUT):**
+    Tabel tanda tangan pada dokumen ekspor WAJIB disetel secara tetap (\`table-layout: fixed\`) untuk memastikan tata letak tidak berubah ukuran secara otomatis (no autofit):
+    - Tabel tanda tangan menggunakan tag: \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`
+    - Memiliki 1 baris (\`<tr>\`) dan 2 kolom (\`<td>\`).
+    - **Kolom Kiri:** Lebar 566.9 pt (20 cm) untuk bagian "Mengetahui / Kepala Madrasah". Tag: \`<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">\`
+    - **Kolom Kanan:** Lebar 170.07 pt (6 cm) untuk bagian penulisan tanggal dan "Guru Mata Pelajaran". Tag: \`<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">\`
+    - **Perataan Teks:** Semua teks dalam tabel tanda tangan HARUS **rata kiri** (\`text-align: left;\`).
+
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
     **DILARANG KERAS:** Jangan pernah menggunakan \`<div class="page-break">\` atau menerapkan gaya CSS \`page-break-before: always\` secara langsung pada elemen lain seperti \`<p>\`, \`<div>\`, \`<li>\`, atau di dalam tabel. Metode \`<br class="page-break" />\` adalah satu-satunya cara yang diizinkan.
@@ -269,9 +279,9 @@ function createPrompt(data: RPMInput): string {
        - Asesmen Formatif (for/as learning): Jelaskan metode asesmen formatif (misal: observasi partisipasi, penilaian LKPD, penilaian antar teman).
        - Asesmen Sumatif (of learning): Jelaskan metode asesmen sumatif (misal: tes tulis di akhir bab, penilaian proyek, presentasi).
 
-    2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table style="width: 100%; border: none; text-align: center; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`).
-        - Kolom kiri: \`<td style="width: 50%; border: none; line-height: 1.2;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-        - Kolom kanan: \`<td style="width: 50%; border: none; line-height: 1.2;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
+    2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`). Semua teks di dalamnya rata kiri (\`text-align: left\`).
+        - Kolom kiri (lebar 566.9 pt / 20 cm): \`<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
+        - Kolom kanan (lebar 170.07 pt / 6 cm): \`<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
 
     3.  **LAMPIRAN:** Gunakan \`<br class="page-break" /><h2 style="text-align: center; font-size: 36px; font-weight: bold;">LAMPIRAN-LAMPIRAN</h2>\` untuk memulai di halaman baru.
         ${lkpdInstructions}
