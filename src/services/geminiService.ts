@@ -149,36 +149,36 @@ function createPrompt(data: RPMInput): string {
 
           <table class="lkpd-activity-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
             <colgroup>
-              <col style="width: 6%;" />
-              <col style="width: 20%;" />
-              <col style="width: 74%;" />
+              <col style="width: 22.68pt;" />
+              <col style="width: 100.63pt;" />
+              <col style="width: 357.69pt;" />
             </colgroup>
             <thead>
               <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center;">No</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 20%; text-align: left;">Tahapan Sintaks (${practice})</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 100.63pt; text-align: left;">Tahapan Sintaks (${practice})</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">1</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">1</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
                   Sajikan ringkasan materi/konsep kunci yang relevan untuk pertemuan ini + 2-3 pertanyaan pemahaman dasar beserta tempat/ruang jawaban siswa.
                 </td>
               </tr>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">2</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">2</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
                   Berikan 1 tugas utama, studi kasus, atau langkah eksperimen/proyek yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi pengerjaan rinci dan ruang lembar pengerjaan siswa.
                 </td>
               </tr>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">3</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">3</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
                   Berikan 2-3 pertanyaan refleksi mendalam mengenai pengalaman belajar siswa dengan metode <b>${practice}</b> pada pertemuan ini.
                 </td>
               </tr>
@@ -353,14 +353,14 @@ function createPrompt(data: RPMInput): string {
        - Asesmen Sumatif (of learning): Jelaskan metode asesmen sumatif (misal: tes tulis di akhir bab, penilaian proyek, presentasi).
 
     2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan atribut dan gaya persis berikut:
-        \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; margin-top: 15px; margin-bottom: 15px;">\`
-        \`<colgroup><col style="width: 60%;" /><col style="width: 40%;" /></colgroup>\`
+        \`<table class="signature-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; border: none; margin-top: 20px; margin-bottom: 20px;">\`
+        \`<colgroup><col style="width: 50%;" /><col style="width: 50%;" /></colgroup>\`
         \`<tr>\`
-          \`<td class="col-kepala" style="width: 60%; border: none; text-align: left; vertical-align: top; line-height: 1.2;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-          \`<td class="col-guru" style="width: 40%; border: none; text-align: left; vertical-align: top; line-height: 1.2;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
+          \`<td class="col-kepala" style="width: 50%; border: none; text-align: left; vertical-align: top; line-height: 1.4; padding: 4pt;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
+          \`<td class="col-guru" style="width: 50%; border: none; text-align: left; vertical-align: top; line-height: 1.4; padding: 4pt;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
         \`</tr>\`
         \`</table>\`
-        **PENTING:** Lebar kolom disetel dengan persentase (60% dan 40%) serta \`table-layout: fixed\` agar selalu pas dengan lebar halaman A4 tanpa melebar melebih batas kertas.
+        **PENTING:** Lebar kolom disetel 50% dan 50% serta \`table-layout: fixed\` tanpa border agar tanda tangan tampil rapi, sejajar, dan pas dengan lebar halaman A4.
 
     3.  **LAMPIRAN:** Bungkus seluruh bagian Lampiran di dalam sebuah div dengan kelas 'lampiran-section' dan gaya \`style="text-align: left;"\`:
         \`<br class="page-break" />\`
