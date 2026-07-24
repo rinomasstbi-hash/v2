@@ -322,10 +322,10 @@ function createPrompt(data: RPMInput): string {
 
     2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan atribut dan gaya persis berikut:
         \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; margin-top: 15px; margin-bottom: 15px;">\`
-        \`<colgroup><col style="width: 566.9pt;" /><col style="width: 170.07pt;" /></colgroup>\`
+        \`<colgroup><col style="width: 450pt;" /><col style="width: 286.97pt;" /></colgroup>\`
         \`<tr>\`
-          \`<td class="col-kepala" style="width: 566.9pt; border: none; text-align: center; vertical-align: top; line-height: 1.2;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-          \`<td class="col-guru" style="width: 170.07pt; border: none; text-align: center; vertical-align: top; line-height: 1.2;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
+          \`<td class="col-kepala" style="width: 450pt; border: none; text-align: center; vertical-align: top; line-height: 1.2;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
+          \`<td class="col-guru" style="width: 286.97pt; border: none; text-align: center; vertical-align: top; line-height: 1.2;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
         \`</tr>\`
         \`</table>\`
         **PENTING:** Lebar kolom harus dikonfigurasi secara absolut (\`table-layout: fixed\`) agar tidak mengalami perubahan ukuran otomatis (no autofit) ketika dibuka di Microsoft Word.
