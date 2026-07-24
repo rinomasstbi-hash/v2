@@ -143,6 +143,32 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   word-wrap: break-word !important; 
                   overflow-wrap: break-word !important;
                 }
+                table.lkpd-activity-table {
+                  width: 481pt !important;
+                  max-width: 481pt !important;
+                  table-layout: fixed !important;
+                }
+                table.lkpd-activity-table col:nth-child(1),
+                table.lkpd-activity-table th:nth-child(1),
+                table.lkpd-activity-table td:nth-child(1) {
+                  width: 30pt !important;
+                }
+                table.lkpd-activity-table col:nth-child(2),
+                table.lkpd-activity-table th:nth-child(2),
+                table.lkpd-activity-table td:nth-child(2) {
+                  width: 97.24pt !important;
+                }
+                table.lkpd-activity-table col:nth-child(3),
+                table.lkpd-activity-table th:nth-child(3),
+                table.lkpd-activity-table td:nth-child(3) {
+                  width: 353.76pt !important; /* 12.48 cm */
+                }
+                table.lkpd-checklist-table,
+                table.lkpd-checklist-table td,
+                table.lkpd-checklist-table th {
+                  width: 481pt !important;
+                  max-width: 481pt !important;
+                }
                 table.signature-table, table[style*="border: none"] { 
                   table-layout: fixed !important; 
                   width: 100% !important; 
@@ -150,11 +176,11 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 }
                 table.signature-table td, table[style*="border: none"] td { 
                   border: none !important; 
-                  text-align: center !important; 
+                  text-align: left !important; 
                   vertical-align: top !important; 
                 }
-                table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 60% !important; }
-                table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 40% !important; }
+                table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 60% !important; text-align: left !important; }
+                table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 40% !important; text-align: left !important; }
                 p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; word-wrap: break-word !important; }
                 .lampiran-section, .lampiran-section p, .lampiran-section li, .lampiran-section td, .lampiran-section th {
                   text-align: left !important;
@@ -267,6 +293,34 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 overflow-wrap: break-word !important;
               }
 
+              /* --- LKPD Specific Column Widths --- */
+              table.lkpd-activity-table {
+                width: 481pt !important;
+                max-width: 481pt !important;
+                table-layout: fixed !important;
+              }
+              table.lkpd-activity-table col:nth-child(1),
+              table.lkpd-activity-table th:nth-child(1),
+              table.lkpd-activity-table td:nth-child(1) {
+                width: 30pt !important;
+              }
+              table.lkpd-activity-table col:nth-child(2),
+              table.lkpd-activity-table th:nth-child(2),
+              table.lkpd-activity-table td:nth-child(2) {
+                width: 97.24pt !important;
+              }
+              table.lkpd-activity-table col:nth-child(3),
+              table.lkpd-activity-table th:nth-child(3),
+              table.lkpd-activity-table td:nth-child(3) {
+                width: 353.76pt !important; /* 12.48 cm */
+              }
+              table.lkpd-checklist-table,
+              table.lkpd-checklist-table td,
+              table.lkpd-checklist-table th {
+                width: 481pt !important;
+                max-width: 481pt !important;
+              }
+
               /* --- Signature Table Styles (Kokoh & Presisi) --- */
               table.signature-table, table[style*="border: none"] {
                 table-layout: fixed !important;
@@ -279,17 +333,17 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               }
               table.signature-table td, table[style*="border: none"] td {
                 border: none !important;
-                text-align: center !important;
+                text-align: left !important;
                 vertical-align: top !important;
                 line-height: 1.2 !important;
               }
               table.signature-table td.col-kepala, table.signature-table td:first-child {
                 width: 60% !important;
-                text-align: center !important;
+                text-align: left !important;
               }
               table.signature-table td.col-guru, table.signature-table td:last-child {
                 width: 40% !important;
-                text-align: center !important;
+                text-align: left !important;
               }
               
               /* --- Text Formatting Styles --- */

@@ -83,6 +83,7 @@ const App: React.FC = () => {
   const [currentLoadingMessage, setCurrentLoadingMessage] = useState(loadingMessages[0]);
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
   const [view, setView] = useState<'form' | 'output'>('form');
+  const [desktopLayout, setDesktopLayout] = useState<'split' | 'full'>('split');
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [colorIndex, setColorIndex] = useState<number>(0);
   const [isServerBusy, setIsServerBusy] = useState<boolean>(false);
@@ -225,51 +226,170 @@ const App: React.FC = () => {
         onOpenHistory={() => setIsHistoryOpen(true)}
       />
 
-      <main className="container mx-auto p-4 md:p-8 lg:p-12">
-        {view === 'form' ? (
-          <div className="bg-white p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-200/50 no-print">
-            <h2 className="text-3xl font-bold text-slate-800 mb-2">Formulir Input <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span></h2>
-            <p className="mb-8 text-slate-500">Isi semua kolom di bawah ini untuk menghasilkan Rencana Pembelajaran Mendalam (RPM) secara otomatis.</p>
-            <RPMForm onSubmit={handleFormSubmit} isLoading={isLoading} />
+      <main className="max-w-[1600px] mx-auto p-3 sm:p-4 md:p-6 lg:p-8">
+        {/* Desktop Layout Mode Switcher */}
+        <div className="hidden lg:flex items-center justify-between mb-4 bg-white px-5 py-3 rounded-xl border border-slate-200/80 shadow-sm no-print">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse"></span>
+            <span className="text-sm font-semibold text-slate-700">Mode Tampilan Desktop</span>
+            <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md font-medium">
+              {desktopLayout === 'split' ? '2 Bilah (Bilah Samping Form & Hasil)' : '1 Bilah (Layar Penuh)'}
+            </span>
           </div>
-        ) : (
-          <div className="bg-white p-8 rounded-xl shadow-2xl shadow-slate-200/50 border border-slate-200/50 print-container">
-             <h2 className="text-3xl font-bold text-slate-800 mb-6 no-print">Hasil <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span> Anda</h2>
-            
-            {isLoading && <LoadingScreen message={currentLoadingMessage} progress={loadingProgress} color={spinnerColors[colorIndex]} />}
 
-            {error && (
-                isConfigError ? <ConfigErrorDisplay message={error} /> : 
-                isServerBusy ? <ServerBusyDisplay /> :
-                <ErrorDisplay message={error} />
-            )}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDesktopLayout('split')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                desktopLayout === 'split'
+                  ? 'bg-cyan-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+              </svg>
+              Mode 2 Bilah
+            </button>
+            <button
+              type="button"
+              onClick={() => setDesktopLayout('full')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                desktopLayout === 'full'
+                  ? 'bg-cyan-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              Mode 1 Bilah (Layar Penuh)
+            </button>
+          </div>
+        </div>
 
-            {!isLoading && !error && generatedRpm && (
-                <div className="mt-6">
-                  <RPMOutput 
+        {/* Layout Grid */}
+        <div className={desktopLayout === 'split' ? "grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" : "block"}>
+          
+          {/* LEFT PANE: RPM Form */}
+          <div className={`
+            ${desktopLayout === 'split' ? 'lg:col-span-5 xl:col-span-4 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-1' : ''}
+            ${view === 'output' && desktopLayout === 'full' ? 'hidden' : ''}
+            ${view === 'output' && desktopLayout === 'split' ? 'hidden lg:block' : 'block'}
+          `}>
+            <div className="bg-white p-5 sm:p-6 md:p-7 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 no-print">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-800">
+                    Formulir Input <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span>
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">Isi parameter untuk menghasilkan dokumen RPM.</p>
+                </div>
+                {generatedRpm && (
+                  <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    Dokumen Siap
+                  </span>
+                )}
+              </div>
+              <RPMForm onSubmit={handleFormSubmit} isLoading={isLoading} />
+            </div>
+          </div>
+
+          {/* RIGHT PANE: RPM Output / Preview / Loading */}
+          <div className={`
+            ${desktopLayout === 'split' ? 'lg:col-span-7 xl:col-span-8 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pl-1' : ''}
+            ${view === 'form' && desktopLayout === 'full' ? 'hidden' : ''}
+            ${view === 'form' && desktopLayout === 'split' ? 'hidden lg:block' : 'block'}
+          `}>
+            <div className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 print-container min-h-[550px] flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 no-print">
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-800">
+                    Hasil <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600">RPM</span> Anda
+                  </h2>
+                  
+                  {/* Mobile Back Button */}
+                  <div className="flex items-center gap-2">
+                    {view === 'output' && (
+                      <button
+                        onClick={handleBackToForm}
+                        className="lg:hidden text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 transition"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Kembali ke Form
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* State: Loading */}
+                {isLoading && (
+                  <div className="py-8">
+                    <LoadingScreen message={currentLoadingMessage} progress={loadingProgress} color={spinnerColors[colorIndex]} />
+                  </div>
+                )}
+
+                {/* State: Error */}
+                {error && (
+                  <div className="py-4">
+                    {isConfigError ? <ConfigErrorDisplay message={error} /> : 
+                    isServerBusy ? <ServerBusyDisplay /> :
+                    <ErrorDisplay message={error} />}
+                    
+                    <div className="mt-4 no-print">
+                      <button
+                        onClick={handleBackToForm}
+                        className="w-full sm:w-auto text-xs bg-white text-slate-700 font-bold py-2.5 px-5 rounded-lg border border-slate-300 hover:bg-slate-50 transition flex items-center justify-center gap-2"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                        </svg>
+                        Kembali ke Formulir
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* State: Generated Content */}
+                {!isLoading && !error && generatedRpm && (
+                  <div className="mt-2">
+                    <RPMOutput 
                       htmlContent={generatedRpm} 
                       isGenerating={isLoading} 
                       onBack={handleBackToForm}
-                      showBackButton={true}
-                  />
-                </div>
-            )}
-            
-            {!isLoading && error && (
-                 <div className="mt-6 no-print">
-                    <button
-                        onClick={handleBackToForm}
-                        className="w-full sm:w-auto bg-white text-slate-700 font-bold py-3 px-6 rounded-lg border-2 border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 flex items-center justify-center gap-2 transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        Kembali ke Formulir
-                    </button>
-                </div>
-            )}
+                      showBackButton={desktopLayout === 'full' || view === 'output'}
+                    />
+                  </div>
+                )}
+
+                {/* State: Empty Placeholder */}
+                {!isLoading && !error && !generatedRpm && (
+                  <div className="my-auto py-20 flex flex-col items-center justify-center text-center p-8 bg-slate-50/80 rounded-2xl border-2 border-dashed border-slate-200/90 no-print">
+                    <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-teal-100 text-cyan-600 rounded-3xl flex items-center justify-center mb-5 shadow-inner">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 mb-2">Pratinjau Dokumen RPM</h3>
+                    <p className="text-sm text-slate-500 max-w-md leading-relaxed mb-6">
+                      Isi formulir di bilah sebelah kiri, lalu klik tombol <span className="font-semibold text-cyan-600">"Generate RPM"</span>. Dokumen Rencana Pembelajaran Mendalam Anda akan ditampilkan langsung di sini secara real-time.
+                    </p>
+                    <div className="inline-flex items-center gap-2 text-xs font-medium text-slate-400 bg-white px-3.5 py-2 rounded-full border border-slate-200 shadow-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Format dokumen A4 otomatis disesuaikan
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        )}
+
+        </div>
       </main>
 
       <Footer />
