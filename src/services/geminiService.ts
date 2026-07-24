@@ -285,22 +285,22 @@ function createPrompt(data: RPMInput): string {
     - Atribut utama setiap tabel wajib disetel: \`width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; word-wrap: break-word; overflow-wrap: break-word;"\`.
     - DILARANG KERAS menentukan lebar tabel atau kolom dalam angka 'pt' atau 'px' absolut yang besar (seperti 481pt, 353pt, atau 600px) karena akan membuat tabel mekar dan melebihi margin kertas A4 di MS Word. SELALU gunakan persentase (%) yang totalnya tepat 100%!
     
-    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (PENGUNCIAN KOLOM):**
-    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis \`class="lkpd-activity-table"\`, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan \`width="100%" align="center"\` dengan \`table-layout: fixed\`.
+    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (PERSENTASE 100%):**
+    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis \`class="lkpd-activity-table"\`, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan \`width="100%" align="center"\` dengan persentase dan \`table-layout: fixed\`.
     - Pada Tabel LKPD Tahapan Pedagogis (3 kolom, \`class="lkpd-activity-table"\`):
-      1. Kolom 1 (No): \`width="0.8cm"\` (22.68pt)
-      2. Kolom 2 (Tahapan Sintaks): \`width="3.55cm"\` (100.63pt)
-      3. Kolom 3 (Kegiatan & Tugas Peserta Didik): \`width="12.49cm"\` (354.05pt) - SANGAT PENTING: Lebar Kolom 3 DILOCK DENGAN TEPAT 12,49 cm dan DILARANG MELEBIHI HALAMAN! Jika membuat lembar titik-titik jawaban (answer line), GUNAKAN SPASI di antara titik-titik (misal: \`. . . . . . . . . .\`) agar teks tidak berupa string tanpa putus yang melebar menembus batas halaman.
+      1. Kolom 1 (No): \`width="6%"\`
+      2. Kolom 2 (Tahapan Sintaks): \`width="20%"\`
+      3. Kolom 3 (Kegiatan & Tugas Peserta Didik): \`width="74%"\` (Total = 6% + 20% + 74% = tepat 100%).
     - Pada Tabel LKPD Identitas: Kolom 1 \`width="50%"\`, Kolom 2 \`width="50%"\`.
-    - Pada Tabel Asesmen & Rubrik lainnya, pastikan total penjumlahan seluruh lebar kolom selalu pas dengan lebar margin kertas.
+    - Pada Tabel Asesmen & Rubrik lainnya, pastikan total penjumlahan seluruh lebar kolom (persentase) selalu tepat 100%.
 
-    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (SPESIAL HANGING BY 0,63 CM - SANGAT PENTING):**
+    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (STANDAR RAPI):**
     - Setiap kali membuat daftar poin (\`<ul><li>\`) atau penomoran (\`<ol><li>\`) di bagian RPM maupun Lampiran, gunakan tag HTML \`<ul>\` atau \`<ol>\` standar tanpa menambah simbol manual seperti \`-\` atau \`•\`.
-    - Atur seluruh daftar bullet dan penomoran agar MEMILIKI INDENTASI HANGING TEPAT 0,63 CM (\`hanging by 0.63cm\`):
-      - Untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: outside; padding-left: 0.63cm; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
-      - Untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: outside; padding-left: 0.63cm; margin-left: 0pt; text-indent: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
-      - Untuk \`<li>\` disetel \`style="margin-left: 0pt; padding-left: 0pt; text-indent: 0pt; margin-bottom: 2pt;"\`
-    - DILARANG KERAS menggunakan padding/margin kiri sembarangan agar poin bullet dan angka SELALU MUNCUL DENGAN JELAS, rapi hanging by 0,63 cm.
+    - Berikan gaya ringkas dan rapi:
+      - Untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: outside; padding-left: 14pt; margin-left: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
+      - Untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: outside; padding-left: 16pt; margin-left: 0pt; margin-top: 2pt; margin-bottom: 2pt;"\`
+      - Untuk \`<li>\` disetel \`style="margin-left: 0pt; padding-left: 0pt; margin-bottom: 2pt;"\`
+    - DILARANG KERAS menggunakan padding/margin kiri besar (seperti 40px) atau tabulasi spasi berlebihan agar poin bullet dan angka SELALU MUNCUL DENGAN JELAS, rapi dan sejajar.
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
