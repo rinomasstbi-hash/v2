@@ -122,18 +122,18 @@ function createPrompt(data: RPMInput): string {
         <h3><b>Lampiran ${meetingNumber}: Lembar Kerja Peserta Didik (Pertemuan Ke-${meetingNumber})</b></h3>
           <p><b>PENTING:</b> Buat LKPD ini dalam format TABEL HTML yang rapi, terstruktur, dan mudah diisi siswa, yang disesuaikan secara khusus dengan praktik pedagogis <b>${practice}</b>.</p>
 
-          <table class="lkpd-identity-table" style="width: 481pt; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
-            <colgroup><col style="width: 240.5pt;" /><col style="width: 240.5pt;" /></colgroup>
+          <table class="lkpd-identity-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
+            <colgroup><col style="width: 50%;" /><col style="width: 50%;" /></colgroup>
             <tr style="background-color: #f2f2f2;">
               <th colspan="2" style="border: 1px solid #000; padding: 8px; text-align: center; font-size: 13pt;"><b>LEMBAR KERJA PESERTA DIDIK (LKPD) - PERTEMUAN KE-${meetingNumber}</b></th>
             </tr>
             <tr>
-              <td style="width: 240.5pt; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
+              <td style="width: 50%; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
                 <b>Nama Siswa / Kelompok:</b> ___________________________<br/>
                 <b>Kelas / Semester:</b> ${className} / ${semester}<br/>
                 <b>No. Absen / Anggota:</b> ___________________________
               </td>
-              <td style="width: 240.5pt; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
+              <td style="width: 50%; border: 1px solid #000; padding: 8px; vertical-align: top; text-align: left;">
                 <b>Mata Pelajaran:</b> ${subject}<br/>
                 <b>Materi / Topik:</b> ${subjectMatter}<br/>
                 <b>Praktik Pedagogis:</b> ${practice}
@@ -147,54 +147,54 @@ function createPrompt(data: RPMInput): string {
             </tr>
           </table>
 
-          <table class="lkpd-activity-table" style="width: 481pt; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
+          <table class="lkpd-activity-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #000; word-wrap: break-word;">
             <colgroup>
-              <col style="width: 30pt;" />
-              <col style="width: 97.24pt;" />
-              <col style="width: 353.76pt;" />
+              <col style="width: 6%;" />
+              <col style="width: 20%;" />
+              <col style="width: 74%;" />
             </colgroup>
             <thead>
               <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 8px; width: 30pt; text-align: center;">No</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 97.24pt; text-align: left;">Tahapan Sintaks (${practice})</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 353.76pt; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center;">No</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 20%; text-align: left;">Tahapan Sintaks (${practice})</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 30pt; text-align: center; vertical-align: top;">1</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 97.24pt; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 353.76pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">1</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
                   Sajikan ringkasan materi/konsep kunci yang relevan untuk pertemuan ini + 2-3 pertanyaan pemahaman dasar beserta tempat/ruang jawaban siswa.
                 </td>
               </tr>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 30pt; text-align: center; vertical-align: top;">2</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 97.24pt; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 353.76pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">2</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
                   Berikan 1 tugas utama, studi kasus, atau langkah eksperimen/proyek yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi pengerjaan rinci dan ruang lembar pengerjaan siswa.
                 </td>
               </tr>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 30pt; text-align: center; vertical-align: top;">3</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 97.24pt; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 353.76pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 6%; text-align: center; vertical-align: top;">3</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 20%; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
+                <td style="border: 1px solid #000; padding: 8px; width: 74%; text-align: left; vertical-align: top;">
                   Berikan 2-3 pertanyaan refleksi mendalam mengenai pengalaman belajar siswa dengan metode <b>${practice}</b> pada pertemuan ini.
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <table class="lkpd-checklist-table" style="width: 481pt; table-layout: fixed; border-collapse: collapse; margin-top: 10px; border: 1px solid #000; word-wrap: break-word;">
-            <colgroup><col style="width: 481pt;" /></colgroup>
+          <table class="lkpd-checklist-table" width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; margin-top: 10px; border: 1px solid #000; word-wrap: break-word;">
+            <colgroup><col style="width: 100%;" /></colgroup>
             <thead>
               <tr style="background-color: #f2f2f2;">
-                <th style="border: 1px solid #000; padding: 8px; width: 481pt; text-align: left;">Ceklis Penilaian Diri & Catatan Guru:</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 100%; text-align: left;">Ceklis Penilaian Diri & Catatan Guru:</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border: 1px solid #000; padding: 8px; width: 481pt; text-align: left;">
+                <td style="border: 1px solid #000; padding: 8px; width: 100%; text-align: left;">
                   Buatlah tabel ceklis pemahaman diri sederhana (misal: "Saya sudah memahami...", "Saya dapat mengaplikasikan...") serta kalimat penyemangat untuk peserta didik.
                 </td>
               </tr>
@@ -280,22 +280,24 @@ function createPrompt(data: RPMInput): string {
     - Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar (Tabel RPM Utama), Anda dapat menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
     - NAMUN, UNTUK SELURUH BAGIAN LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menggunakan perataan TEKS KIRI STANDAR (\`style="text-align: left;"\`) dan DILARANG KERAS menggunakan justify.
 
-    **ATURAN POSISI & UKURAN TABEL (PASTI CENTER & KANAN-KIRI SEIMBANG):**
-    - Seluruh tabel yang Anda buat (Tabel RPM Utama, Tabel Tanda Tangan, Tabel LKPD, dan Tabel Asesmen) HARUS diposisikan TEPAT DI TENGAH DOKUMEN dengan menambahkan gaya \`margin-left: auto; margin-right: auto;\` pada tag \`<table>\`.
-    - Atribut utama setiap tabel wajib disetel: \`style="width: 481pt; max-width: 481pt; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; word-wrap: break-word; overflow-wrap: break-word;"\`.
-    - DILARANG KERAS membuat tabel atau menentukan lebar kolom yang totalnya melebihi **481pt** (lebar maksimal area cetak A4 margin 2cm).
+    **ATURAN POSISI & UKURAN TABEL (PASTI CENTER & KANAN-KIRI PAS DI MS WORD):**
+    - Seluruh tabel yang Anda buat (Tabel RPM Utama, Tabel Tanda Tangan, Tabel LKPD, dan Tabel Asesmen) HARUS diposisikan TEPAT DI TENGAH DOKUMEN dengan menambahkan atribut \`width="100%" align="center"\` serta gaya \`margin-left: auto; margin-right: auto;\` pada tag \`<table>\`.
+    - Atribut utama setiap tabel wajib disetel: \`width="100%" align="center" style="width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; word-wrap: break-word; overflow-wrap: break-word;"\`.
+    - DILARANG KERAS menentukan lebar tabel atau kolom dalam angka 'pt' atau 'px' absolut yang besar (seperti 481pt, 353pt, atau 600px) karena akan membuat tabel mekar dan melebihi margin kertas A4 di MS Word. SELALU gunakan persentase (%) yang totalnya tepat 100%!
     
-    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (FIXED 481pt):**
-    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan lebar FIXED **481pt** (\`style="width: 481pt; max-width: 481pt; margin-left: auto; margin-right: auto; table-layout: fixed;"\`).
+    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (PERSENTASE 100%):**
+    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan \`width="100%" align="center"\` dengan persentase.
     - Pada Tabel LKPD Tahapan Pedagogis (3 kolom):
-      1. Kolom 1 (No): \`width: 30pt;\`
-      2. Kolom 2 (Tahapan Sintaks): \`width: 97.24pt;\`
-      3. Kolom 3 (Kegiatan & Tugas): \`width: 353.76pt;\` (Total = 30 + 97.24 + 353.76 = tepat 481pt).
-    - Pada Tabel LKPD Identitas, Ceklis, Rubrik, dan Asesmen lainnya, pastikan total penjumlahan seluruh lebar kolom (persentase atau pt) selalu tepat 481pt (100%).
+      1. Kolom 1 (No): \`width="6%"\`
+      2. Kolom 2 (Tahapan Sintaks): \`width="20%"\`
+      3. Kolom 3 (Kegiatan & Tugas): \`width="74%"\` (Total = 6% + 20% + 74% = tepat 100%).
+    - Pada Tabel LKPD Identitas: Kolom 1 \`width="50%"\`, Kolom 2 \`width="50%"\`.
+    - Pada Tabel Asesmen & Rubrik lainnya, pastikan total penjumlahan seluruh lebar kolom (persentase) selalu tepat 100%.
 
-    **ATURAN DAFTAR BULLET/POIN DI DALAM TABEL (SANGAT PENTING):**
-    - Setiap kali membuat daftar poin (\`<ul><li>\` atau \`<ol><li>\`) DI DALAM SEL TABEL, HARUS diberi gaya \`style="padding-left: 16pt; margin-left: 0; margin-top: 2pt; margin-bottom: 2pt;"\`.
-    - DILARANG KERAS membiarkan padding bawaan yang besar (seperti 40px/2.5em) karena akan membuat poin bullets menjorok/tab terlalu jauh ke kanan. Poin bullets harus sejajar dan rapat dengan isi tabel.
+    **ATURAN DAFTAR BULLET/POIN DAN PENOMORAN (SANGAT PENTING):**
+    - Setiap kali membuat daftar poin (\`<ul><li>\`) atau penomoran (\`<ol><li>\`), gunakan tag HTML \`<ul>\` atau \`<ol>\` standar tanpa menambah simbol manual seperti \`-\` atau \`•\`.
+    - Berikan gaya ringkas dan rapi: untuk \`<ul>\` disetel \`style="list-style-type: disc; list-style-position: outside; padding-left: 14pt; margin-left: 0; margin-top: 2pt; margin-bottom: 2pt;"\` dan untuk \`<ol>\` disetel \`style="list-style-type: decimal; list-style-position: outside; padding-left: 16pt; margin-left: 0; margin-top: 2pt; margin-bottom: 2pt;"\`.
+    - DILARANG KERAS menggunakan padding besar (seperti 40px) atau tabulasi spasi berlebihan agar poin bullet dan angka tetap SELALU MUNCUL DENGAN JELAS, sejajar, dan rata dengan margin/teks tanpa menjorok terlalu jauh ke kanan.
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").

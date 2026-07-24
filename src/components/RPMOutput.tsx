@@ -59,6 +59,116 @@ const shortenTopic = (topic: string): string => {
 };
 
 
+// Helper function to normalize HTML table widths, centering, and bullet list paddings for Word and Google Docs
+const normalizeRpmTablesAndLists = (rawHtml: string): string => {
+  if (!rawHtml || typeof document === 'undefined') return rawHtml;
+
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(rawHtml, 'text/html');
+
+    // 1. Process all <table> elements
+    const tables = doc.querySelectorAll('table');
+    tables.forEach(table => {
+      // Force HTML attributes for MS Word rendering engine
+      table.setAttribute('width', '100%');
+      table.setAttribute('align', 'center');
+
+      const isNoBorder = table.classList.contains('signature-table') || 
+                         table.getAttribute('style')?.includes('border: none') ||
+                         table.getAttribute('style')?.includes('border:none');
+
+      let styleStr = 'width: 100% !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; table-layout: fixed !important; border-collapse: collapse !important; word-wrap: break-word !important; overflow-wrap: break-word !important;';
+      
+      if (isNoBorder) {
+        styleStr += ' border: none !important; margin-top: 15pt; margin-bottom: 15pt;';
+      } else {
+        styleStr += ' margin-top: 10pt; margin-bottom: 10pt;';
+      }
+      table.setAttribute('style', styleStr);
+
+      // Custom Column Percentages for LKPD & Signature Tables
+      if (table.classList.contains('lkpd-activity-table')) {
+        const cols = table.querySelectorAll('col');
+        if (cols.length >= 3) {
+          cols[0].setAttribute('style', 'width: 6% !important;');
+          cols[0].setAttribute('width', '6%');
+          cols[1].setAttribute('style', 'width: 20% !important;');
+          cols[1].setAttribute('width', '20%');
+          cols[2].setAttribute('style', 'width: 74% !important;');
+          cols[2].setAttribute('width', '74%');
+        }
+        const headersOrCells = table.querySelectorAll('tr:first-child > th, tr:first-child > td');
+        if (headersOrCells.length >= 3) {
+          headersOrCells[0].setAttribute('style', (headersOrCells[0].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 6% !important;');
+          headersOrCells[1].setAttribute('style', (headersOrCells[1].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 20% !important;');
+          headersOrCells[2].setAttribute('style', (headersOrCells[2].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 74% !important;');
+        }
+      } else if (table.classList.contains('lkpd-identity-table')) {
+        const cols = table.querySelectorAll('col');
+        if (cols.length >= 2) {
+          cols[0].setAttribute('style', 'width: 50% !important;');
+          cols[0].setAttribute('width', '50%');
+          cols[1].setAttribute('style', 'width: 50% !important;');
+          cols[1].setAttribute('width', '50%');
+        }
+      } else if (isNoBorder) {
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length >= 2) {
+            cells[0].setAttribute('style', 'width: 60% !important; text-align: left !important; border: none !important; padding: 4pt; vertical-align: top;');
+            cells[1].setAttribute('style', 'width: 40% !important; text-align: left !important; border: none !important; padding: 4pt; vertical-align: top;');
+          }
+        });
+      } else {
+        // Strip any fixed pt or px width from cell styles in general tables to prevent Word overflow
+        const cells = table.querySelectorAll('td, th');
+        cells.forEach(cell => {
+          let style = cell.getAttribute('style') || '';
+          if (style.match(/width\s*:\s*\d+(\.\d+)?(pt|px)/i)) {
+            style = style.replace(/width\s*:\s*\d+(\.\d+)?(pt|px)\s*;?/gi, '');
+            cell.setAttribute('style', style);
+          }
+        });
+      }
+    });
+
+    // 2. Fix bullet and numbered lists across the entire document (ensure bullets/numbers are ALWAYS visible & compact)
+    const allLists = doc.querySelectorAll('ul, ol');
+    allLists.forEach(list => {
+      const isOrdered = list.tagName.toLowerCase() === 'ol';
+      let listStyle = list.getAttribute('style') || '';
+      
+      listStyle = listStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
+      listStyle = listStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
+      listStyle = listStyle.replace(/list-style(-type)?\s*:\s*[^;]+;?/gi, '');
+      listStyle = listStyle.replace(/list-style-position\s*:\s*[^;]+;?/gi, '');
+
+      const styleType = isOrdered ? 'decimal' : 'disc';
+      const padLeft = isOrdered ? '16pt' : '14pt';
+
+      listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: ${padLeft} !important; margin-left: 0 !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
+      list.setAttribute('style', listStyle);
+
+      const items = list.querySelectorAll('li');
+      items.forEach(li => {
+        let liStyle = li.getAttribute('style') || '';
+        liStyle = liStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
+        liStyle = liStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
+        liStyle += ' margin-left: 0 !important; padding-left: 0 !important; margin-bottom: 2pt !important; text-align: left !important;';
+        li.setAttribute('style', liStyle);
+      });
+    });
+
+    return doc.body.innerHTML;
+  } catch (err) {
+    console.error('Gagal normalisasi HTML tabel:', err);
+    return rawHtml;
+  }
+};
+
+
 export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating, onBack, showBackButton }) => {
   const [copyButtonText, setCopyButtonText] = useState('Salin & Buka di Google Dokumen');
   const [isCopying, setIsCopying] = useState(false);
@@ -97,6 +207,9 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
       }
     }
 
+    // 4. Normalize tables & list paddings
+    processed = normalizeRpmTablesAndLists(processed);
+
     return processed;
   }, [htmlContent]);
 
@@ -111,6 +224,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
       
       contentForClipboard = contentForClipboard.replace(/border: 1px solid #ddd/g, 'border: 1px solid #000');
       contentForClipboard = contentForClipboard.replace(/background-color: #f2f2f2/g, 'background-color: #e0e0e0');
+      contentForClipboard = normalizeRpmTablesAndLists(contentForClipboard);
 
       const html = `
         <html>
@@ -127,11 +241,11 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   color: #000 !important; 
                   line-height: 1.5;
                 }
-                /* Center all tables and lock width to 481pt */
+                /* Center all tables and lock width to 100% of page text margins */
                 table { 
                   border-collapse: collapse !important; 
-                  width: 481pt !important; 
-                  max-width: 481pt !important; 
+                  width: 100% !important; 
+                  max-width: 100% !important; 
                   table-layout: fixed !important; 
                   word-wrap: break-word !important; 
                   overflow-wrap: break-word !important; 
@@ -149,37 +263,32 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   word-wrap: break-word !important; 
                   overflow-wrap: break-word !important;
                 }
-                /* All LKPD and Lampiran Tables locked to 481pt fixed */
+                /* All LKPD and Lampiran Tables locked to 100% fit */
                 table.lkpd-identity-table,
                 table.lkpd-activity-table,
                 table.lkpd-checklist-table,
                 .lampiran-section table {
-                  width: 481pt !important;
-                  max-width: 481pt !important;
+                  width: 100% !important;
+                  max-width: 100% !important;
                   margin-left: auto !important;
                   margin-right: auto !important;
                   table-layout: fixed !important;
                 }
                 table.lkpd-activity-table col:nth-child(1),
                 table.lkpd-activity-table th:nth-child(1),
-                table.lkpd-activity-table td:nth-child(1) {
-                  width: 30pt !important;
-                }
+                table.lkpd-activity-table td:nth-child(1) { width: 6% !important; text-align: center !important; }
                 table.lkpd-activity-table col:nth-child(2),
                 table.lkpd-activity-table th:nth-child(2),
-                table.lkpd-activity-table td:nth-child(2) {
-                  width: 97.24pt !important;
-                }
+                table.lkpd-activity-table td:nth-child(2) { width: 20% !important; text-align: left !important; }
                 table.lkpd-activity-table col:nth-child(3),
                 table.lkpd-activity-table th:nth-child(3),
-                table.lkpd-activity-table td:nth-child(3) {
-                  width: 353.76pt !important; /* 12.48 cm */
-                }
+                table.lkpd-activity-table td:nth-child(3) { width: 74% !important; text-align: left !important; }
+
                 /* Signature Table Centering & Width */
                 table.signature-table, table[style*="border: none"] { 
                   table-layout: fixed !important; 
-                  width: 481pt !important; 
-                  max-width: 481pt !important; 
+                  width: 100% !important; 
+                  max-width: 100% !important; 
                   margin-left: auto !important;
                   margin-right: auto !important;
                   border-collapse: collapse !important;
@@ -196,17 +305,40 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 60% !important; text-align: left !important; }
                 table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 40% !important; text-align: left !important; }
                 
-                /* Compact Bullets / Lists inside Tables (No large tab indentation) */
-                table ul, table ol, td ul, td ol {
+                /* Compact Bullets / Lists (Always visible, flush with left margin) */
+                ul {
+                  list-style-type: disc !important;
+                  list-style-position: outside !important;
+                  margin-top: 2pt !important;
+                  margin-bottom: 4pt !important;
+                  padding-left: 14pt !important;
+                  margin-left: 0 !important;
+                }
+                ol {
+                  list-style-type: decimal !important;
+                  list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
                   padding-left: 16pt !important;
                   margin-left: 0 !important;
                 }
-                table li, td li {
+                li {
                   margin-bottom: 2pt !important;
                   padding-left: 0 !important;
+                  margin-left: 0 !important;
                   text-align: left !important;
+                }
+                table ul, td ul, th ul {
+                  list-style-type: disc !important;
+                  list-style-position: outside !important;
+                  padding-left: 14pt !important;
+                  margin-left: 0 !important;
+                }
+                table ol, td ol, th ol {
+                  list-style-type: decimal !important;
+                  list-style-position: outside !important;
+                  padding-left: 16pt !important;
+                  margin-left: 0 !important;
                 }
                 p { 
                   margin-top: 0; 
@@ -215,11 +347,6 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   text-justify: inter-word; 
                   line-height: 1.5; 
                   word-wrap: break-word !important; 
-                }
-                ul, ol {
-                  margin-top: 0;
-                  margin-bottom: 0.5em;
-                  padding-left: 20pt;
                 }
                 .lampiran-section, .lampiran-section p, .lampiran-section li, .lampiran-section td, .lampiran-section th {
                   text-align: left !important;
@@ -269,6 +396,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
     let contentForDoc = outputElement.innerHTML;
     contentForDoc = contentForDoc.replace(/border: 1px solid #ddd/g, 'border: 1px solid #000');
     contentForDoc = contentForDoc.replace(/background-color: #f2f2f2/g, 'background-color: #e0e0e0');
+    contentForDoc = normalizeRpmTablesAndLists(contentForDoc);
 
     const html = `
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -311,11 +439,11 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               }
               br.page-break { page-break-before: always; }
               
-              /* --- Table Styles (Centered & Fixed 481pt) --- */
+              /* --- Table Styles (Centered & Fits 100% Page Text Margin) --- */
               table { 
                 border-collapse: collapse !important; 
-                width: 481pt !important; 
-                max-width: 481pt !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
                 table-layout: fixed !important; 
                 word-wrap: break-word !important; 
                 overflow-wrap: break-word !important;
@@ -334,13 +462,13 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 overflow-wrap: break-word !important;
               }
 
-              /* --- LKPD Specific Column Widths (Fixed 481pt) --- */
+              /* --- LKPD Specific Column Widths (100% Fit) --- */
               table.lkpd-identity-table,
               table.lkpd-activity-table,
               table.lkpd-checklist-table,
               .lampiran-section table {
-                width: 481pt !important;
-                max-width: 481pt !important;
+                width: 100% !important;
+                max-width: 100% !important;
                 margin-left: auto !important;
                 margin-right: auto !important;
                 table-layout: fixed !important;
@@ -348,24 +476,27 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               table.lkpd-activity-table col:nth-child(1),
               table.lkpd-activity-table th:nth-child(1),
               table.lkpd-activity-table td:nth-child(1) {
-                width: 30pt !important;
+                width: 6% !important;
+                text-align: center !important;
               }
               table.lkpd-activity-table col:nth-child(2),
               table.lkpd-activity-table th:nth-child(2),
               table.lkpd-activity-table td:nth-child(2) {
-                width: 97.24pt !important;
+                width: 20% !important;
+                text-align: left !important;
               }
               table.lkpd-activity-table col:nth-child(3),
               table.lkpd-activity-table th:nth-child(3),
               table.lkpd-activity-table td:nth-child(3) {
-                width: 353.76pt !important; /* 12.48 cm */
+                width: 74% !important;
+                text-align: left !important;
               }
 
               /* --- Signature Table Styles --- */
               table.signature-table, table[style*="border: none"] {
                 table-layout: fixed !important;
-                width: 481pt !important;
-                max-width: 481pt !important;
+                width: 100% !important;
+                max-width: 100% !important;
                 margin-left: auto !important;
                 margin-right: auto !important;
                 border-collapse: collapse !important;
@@ -388,17 +519,41 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 text-align: left !important;
               }
               
-              /* --- Bullet lists inside Tables (Compact without huge tab indentation) --- */
-              table ul, table ol, td ul, td ol {
+              /* --- Bullet lists & Numbering (Always visible, compact, no deep tab indentation) --- */
+              ul {
+                list-style-type: disc !important;
+                list-style-position: outside !important;
+                margin-top: 2pt !important;
+                margin-bottom: 4pt !important;
+                padding-left: 14pt !important;
+                margin-left: 0 !important;
+              }
+              ol {
+                list-style-type: decimal !important;
+                list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
                 padding-left: 16pt !important;
                 margin-left: 0 !important;
               }
-              table li, td li {
+              li {
                 margin-bottom: 2pt !important;
                 padding-left: 0 !important;
+                margin-left: 0 !important;
                 text-align: left !important;
+                word-wrap: break-word !important;
+              }
+              table ul, td ul, th ul {
+                list-style-type: disc !important;
+                list-style-position: outside !important;
+                padding-left: 14pt !important;
+                margin-left: 0 !important;
+              }
+              table ol, td ol, th ol {
+                list-style-type: decimal !important;
+                list-style-position: outside !important;
+                padding-left: 16pt !important;
+                margin-left: 0 !important;
               }
 
               /* --- Text Formatting Styles --- */
@@ -414,11 +569,6 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 margin-top: 1.2em;
                 margin-bottom: 0.6em;
                 line-height: 1.2;
-              }
-              ul, ol {
-                margin-top: 0;
-                margin-bottom: 0.5em;
-                padding-left: 20pt; 
               }
 
               /* --- Lampiran (Appendix) Text Alignment -> Left aligned, NOT justified --- */
@@ -531,8 +681,8 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           }
           #printable-area table {
             border-collapse: collapse !important;
-            width: 481pt !important;
-            max-width: 481pt !important;
+            width: 100% !important;
+            max-width: 100% !important;
             margin-left: auto !important;
             margin-right: auto !important;
             margin-top: 10pt !important;
@@ -554,26 +704,26 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           #printable-area table.lkpd-activity-table,
           #printable-area table.lkpd-checklist-table,
           #printable-area .lampiran-section table {
-            width: 481pt !important;
-            max-width: 481pt !important;
+            width: 100% !important;
+            max-width: 100% !important;
             margin-left: auto !important;
             margin-right: auto !important;
             table-layout: fixed !important;
           }
           #printable-area table.lkpd-activity-table col:nth-child(1),
           #printable-area table.lkpd-activity-table th:nth-child(1),
-          #printable-area table.lkpd-activity-table td:nth-child(1) { width: 30pt !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(1) { width: 6% !important; text-align: center !important; }
           #printable-area table.lkpd-activity-table col:nth-child(2),
           #printable-area table.lkpd-activity-table th:nth-child(2),
-          #printable-area table.lkpd-activity-table td:nth-child(2) { width: 97.24pt !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(2) { width: 20% !important; text-align: left !important; }
           #printable-area table.lkpd-activity-table col:nth-child(3),
           #printable-area table.lkpd-activity-table th:nth-child(3),
-          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 353.76pt !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 74% !important; text-align: left !important; }
 
           #printable-area table.signature-table, #printable-area table[style*="border: none"] {
             table-layout: fixed !important;
-            width: 481pt !important;
-            max-width: 481pt !important;
+            width: 100% !important;
+            max-width: 100% !important;
             margin-left: auto !important;
             margin-right: auto !important;
             border-collapse: collapse !important;
@@ -590,16 +740,39 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           #printable-area table.signature-table td:first-child { width: 60% !important; text-align: left !important; }
           #printable-area table.signature-table td:last-child { width: 40% !important; text-align: left !important; }
 
-          #printable-area table ul, #printable-area table ol, #printable-area td ul, #printable-area td ol {
+          #printable-area ul {
+            list-style-type: disc !important;
+            list-style-position: outside !important;
+            margin-top: 2pt !important;
+            margin-bottom: 4pt !important;
+            padding-left: 14pt !important;
+            margin-left: 0 !important;
+          }
+          #printable-area ol {
+            list-style-type: decimal !important;
+            list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
             padding-left: 16pt !important;
             margin-left: 0 !important;
           }
-          #printable-area table li, #printable-area td li {
+          #printable-area li {
             margin-bottom: 2pt !important;
             padding-left: 0 !important;
+            margin-left: 0 !important;
             text-align: left !important;
+          }
+          #printable-area table ul, #printable-area td ul, #printable-area th ul {
+            list-style-type: disc !important;
+            list-style-position: outside !important;
+            padding-left: 14pt !important;
+            margin-left: 0 !important;
+          }
+          #printable-area table ol, #printable-area td ol, #printable-area th ol {
+            list-style-type: decimal !important;
+            list-style-position: outside !important;
+            padding-left: 16pt !important;
+            margin-left: 0 !important;
           }
           #printable-area p {
             margin-top: 0;
