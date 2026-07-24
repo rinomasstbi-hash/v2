@@ -116,6 +116,10 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 }
                 table { border-collapse: collapse; width: 100%; }
                 td, th { vertical-align: top; padding: 8px; text-align: justify; text-justify: inter-word; }
+                table.signature-table, table[style*="border: none"] { table-layout: fixed !important; width: 100% !important; border: none !important; }
+                table.signature-table td, table[style*="border: none"] td { border: none !important; text-align: center !important; vertical-align: top !important; }
+                table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 566.9pt !important; }
+                table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 170.07pt !important; }
                 p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; }
                 .page-break { page-break-before: always; }
             </style>
@@ -210,6 +214,30 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 border: 1px solid #000; 
                 text-align: justify; /* Rata kanan-kiri */
                 text-justify: inter-word;
+              }
+
+              /* --- Signature Table Styles (Kokoh & Presisi) --- */
+              table.signature-table, table[style*="border: none"] {
+                table-layout: fixed !important;
+                width: 100% !important;
+                border-collapse: collapse !important;
+                border: none !important;
+                margin-top: 15pt !important;
+                margin-bottom: 15pt !important;
+              }
+              table.signature-table td, table[style*="border: none"] td {
+                border: none !important;
+                text-align: center !important;
+                vertical-align: top !important;
+                line-height: 1.2 !important;
+              }
+              table.signature-table td.col-kepala, table.signature-table td:first-child {
+                width: 566.9pt !important;
+                text-align: center !important;
+              }
+              table.signature-table td.col-guru, table.signature-table td:last-child {
+                width: 170.07pt !important;
+                text-align: center !important;
               }
               
               /* --- Text Formatting Styles --- */
