@@ -281,7 +281,7 @@ function createPrompt(data: RPMInput): string {
 
     2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`). Semua teks di dalamnya rata kiri (\`text-align: left\`).
         - Kolom kiri (lebar 566.9 pt / 20 cm): \`<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-        - Kolom kanan (lebar 226.77 pt / 8 cm): \`<td class="col-right" style="width: 226.77pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
+        - Kolom kanan (lebar 226.77 pt / 8 cm): \`<td class="col-right" style="width: 226.77pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Jombang, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
 
     3.  **LAMPIRAN:** Gunakan \`<br class="page-break" /><h2 style="text-align: center; font-size: 36px; font-weight: bold;">LAMPIRAN-LAMPIRAN</h2>\` untuk memulai di halaman baru.
         ${lkpdInstructions}

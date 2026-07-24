@@ -111,6 +111,17 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
     // 3. Format Signature Table
     processed = formatSignatureTable(processed);
 
+    // 4. Replace date placeholders with formatted current date
+    const currentDateFormatted = new Date().toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    processed = processed.replace(
+      /\[\s*Generate\s+tanggal[^\n\]]*\]/gi,
+      currentDateFormatted
+    );
+
     return processed;
   }, [htmlContent, formatSignatureTable]);
 
