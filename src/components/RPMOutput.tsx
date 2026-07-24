@@ -84,6 +84,19 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
       `
     );
 
+    // 3. Process Lampiran section to ensure left text alignment and no justification
+    if (processed.includes('LAMPIRAN') || processed.includes('Lampiran')) {
+      const lampiranIdx = processed.search(/<h[23][^>]*>.*?(LAMPIRAN|Lampiran)/i);
+      if (lampiranIdx !== -1) {
+        const mainPart = processed.substring(0, lampiranIdx);
+        let lampiranPart = processed.substring(lampiranIdx);
+        // Replace inline text-align: justify with text-align: left inside lampiranPart
+        lampiranPart = lampiranPart.replace(/style="([^"]*?)text-align:\s*justify;?([^"]*?)"/gi, 'style="$1text-align: left;$2"');
+        lampiranPart = lampiranPart.replace(/style='([^']*?)text-align:\s*justify;?([^']*?)'/gi, "style='$1text-align: left;$2'");
+        processed = `${mainPart}<div class="lampiran-section" style="text-align: left;">${lampiranPart}</div>`;
+      }
+    }
+
     return processed;
   }, [htmlContent]);
 
@@ -114,13 +127,39 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   color: #000 !important; 
                   line-height: 1.5;
                 }
-                table { border-collapse: collapse; width: 100%; }
-                td, th { vertical-align: top; padding: 8px; text-align: justify; text-justify: inter-word; }
-                table.signature-table, table[style*="border: none"] { table-layout: fixed !important; width: 100% !important; border: none !important; }
-                table.signature-table td, table[style*="border: none"] td { border: none !important; text-align: center !important; vertical-align: top !important; }
-                table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 450pt !important; }
-                table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 286.97pt !important; }
-                p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; }
+                table { 
+                  border-collapse: collapse !important; 
+                  width: 100% !important; 
+                  max-width: 100% !important; 
+                  table-layout: fixed !important; 
+                  word-wrap: break-word !important; 
+                  overflow-wrap: break-word !important; 
+                }
+                td, th { 
+                  vertical-align: top; 
+                  padding: 8px; 
+                  text-align: justify; 
+                  text-justify: inter-word; 
+                  word-wrap: break-word !important; 
+                  overflow-wrap: break-word !important;
+                }
+                table.signature-table, table[style*="border: none"] { 
+                  table-layout: fixed !important; 
+                  width: 100% !important; 
+                  border: none !important; 
+                }
+                table.signature-table td, table[style*="border: none"] td { 
+                  border: none !important; 
+                  text-align: center !important; 
+                  vertical-align: top !important; 
+                }
+                table.signature-table td:first-child, table[style*="border: none"] td:first-child { width: 60% !important; }
+                table.signature-table td:last-child, table[style*="border: none"] td:last-child { width: 40% !important; }
+                p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; word-wrap: break-word !important; }
+                .lampiran-section, .lampiran-section p, .lampiran-section li, .lampiran-section td, .lampiran-section th {
+                  text-align: left !important;
+                  text-justify: auto !important;
+                }
                 .page-break { page-break-before: always; }
             </style>
           </head>
@@ -203,23 +242,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 font-family: 'Times New Roman', Times, serif; 
                 font-size: 12pt; 
                 line-height: 1.5; 
+                color: #000;
               }
               br.page-break { page-break-before: always; }
               
-              /* --- Table Styles --- */
-              table { border-collapse: collapse; width: 100%; }
+              /* --- Table Styles (Fit A4 Page Width) --- */
+              table { 
+                border-collapse: collapse !important; 
+                width: 100% !important; 
+                max-width: 100% !important; 
+                table-layout: fixed !important; 
+                word-wrap: break-word !important; 
+                overflow-wrap: break-word !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+              }
               td, th { 
                 vertical-align: top; 
                 padding: 8px; 
                 border: 1px solid #000; 
-                text-align: justify; /* Rata kanan-kiri */
+                text-align: justify; /* Rata kanan-kiri untuk tabel utama */
                 text-justify: inter-word;
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
               }
 
               /* --- Signature Table Styles (Kokoh & Presisi) --- */
               table.signature-table, table[style*="border: none"] {
                 table-layout: fixed !important;
                 width: 100% !important;
+                max-width: 100% !important;
                 border-collapse: collapse !important;
                 border: none !important;
                 margin-top: 15pt !important;
@@ -232,11 +284,11 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 line-height: 1.2 !important;
               }
               table.signature-table td.col-kepala, table.signature-table td:first-child {
-                width: 450pt !important;
+                width: 60% !important;
                 text-align: center !important;
               }
               table.signature-table td.col-guru, table.signature-table td:last-child {
-                width: 286.97pt !important;
+                width: 40% !important;
                 text-align: center !important;
               }
               
@@ -244,9 +296,10 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               p { 
                 margin-top: 0; 
                 margin-bottom: 0.5em; 
-                text-align: justify; /* Rata kanan-kiri untuk paragraf */
+                text-align: justify; /* Rata kanan-kiri untuk paragraf utama */
                 text-justify: inter-word;
                 line-height: 1.5; 
+                word-wrap: break-word !important;
               }
               h1, h2, h3, h4, h5, h6 {
                 margin-top: 1.2em;
@@ -260,8 +313,20 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               }
               li {
                 margin-bottom: 0.2em; 
-                text-align: justify; /* Rata kanan-kiri untuk daftar */
+                text-align: justify; /* Rata kanan-kiri untuk daftar utama */
                 text-justify: inter-word;
+                word-wrap: break-word !important;
+              }
+
+              /* --- Lampiran (Appendix) Text Alignment -> Left aligned, NOT justified --- */
+              .lampiran-section, 
+              .lampiran-section p, 
+              .lampiran-section li, 
+              .lampiran-section td, 
+              .lampiran-section th,
+              .lampiran-section div {
+                text-align: left !important;
+                text-justify: auto !important;
               }
           </style>
         </head>
