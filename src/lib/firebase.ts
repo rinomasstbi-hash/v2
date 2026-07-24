@@ -1,12 +1,29 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp, deleteApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+import defaultConfig from '../../firebase-applet-config.json';
 import { UserProfile } from '../types';
 
 const ADMIN_EMAIL = 'rinomasstbi@gmail.com';
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const getActiveFirebaseConfig = () => {
+  try {
+    const saved = localStorage.getItem('custom_firebase_config');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.apiKey && parsed.projectId) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn("Gagal membaca custom_firebase_config dari localStorage:", e);
+  }
+  return defaultConfig;
+};
+
+const activeConfig = getActiveFirebaseConfig();
+
+const app = !getApps().length ? initializeApp(activeConfig) : getApp();
 
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
@@ -14,9 +31,23 @@ googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
 
-export const db = firebaseConfig.firestoreDatabaseId 
-  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+export const db = activeConfig.firestoreDatabaseId 
+  ? getFirestore(app, activeConfig.firestoreDatabaseId)
   : getFirestore(app);
+
+export const saveCustomFirebaseConfig = (configObj: any) => {
+  localStorage.setItem('custom_firebase_config', JSON.stringify(configObj));
+  window.location.reload();
+};
+
+export const resetCustomFirebaseConfig = () => {
+  localStorage.removeItem('custom_firebase_config');
+  window.location.reload();
+};
+
+export const isUsingCustomFirebaseConfig = () => {
+  return !!localStorage.getItem('custom_firebase_config');
+};
 
 export const loginWithGoogle = async () => {
   try {
