@@ -93,19 +93,34 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       if (table.classList.contains('lkpd-activity-table')) {
         const cols = table.querySelectorAll('col');
         if (cols.length >= 3) {
-          cols[0].setAttribute('style', 'width: 22.68pt !important;'); // 0.8 cm
+          cols[0].setAttribute('style', 'width: 0.8cm !important; width: 22.68pt !important;');
           cols[0].setAttribute('width', '22.68pt');
-          cols[1].setAttribute('style', 'width: 100.63pt !important;'); // 3.55 cm
+          cols[1].setAttribute('style', 'width: 3.55cm !important; width: 100.63pt !important;');
           cols[1].setAttribute('width', '100.63pt');
-          cols[2].setAttribute('style', 'width: 354.05pt !important;'); // 12.49 cm
+          cols[2].setAttribute('style', 'width: 12.49cm !important; width: 354.05pt !important;');
           cols[2].setAttribute('width', '354.05pt');
         }
-        const headersOrCells = table.querySelectorAll('tr:first-child > th, tr:first-child > td');
-        if (headersOrCells.length >= 3) {
-          headersOrCells[0].setAttribute('style', (headersOrCells[0].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 22.68pt !important;');
-          headersOrCells[1].setAttribute('style', (headersOrCells[1].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 100.63pt !important;');
-          headersOrCells[2].setAttribute('style', (headersOrCells[2].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 354.05pt !important;');
-        }
+        // Force width 12.49cm (354.05pt) on EVERY single row in Column 3
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('th, td');
+          if (cells.length >= 3) {
+            let s0 = cells[0].getAttribute('style') || '';
+            s0 = s0.replace(/width\s*:\s*[^;]+;?/gi, '');
+            cells[0].setAttribute('style', s0 + ' width: 0.8cm !important; width: 22.68pt !important; text-align: center !important;');
+            cells[0].setAttribute('width', '22.68pt');
+
+            let s1 = cells[1].getAttribute('style') || '';
+            s1 = s1.replace(/width\s*:\s*[^;]+;?/gi, '');
+            cells[1].setAttribute('style', s1 + ' width: 3.55cm !important; width: 100.63pt !important; text-align: left !important;');
+            cells[1].setAttribute('width', '100.63pt');
+
+            let s2 = cells[2].getAttribute('style') || '';
+            s2 = s2.replace(/width\s*:\s*[^;]+;?/gi, '');
+            cells[2].setAttribute('style', s2 + ' width: 12.49cm !important; width: 354.05pt !important; text-align: left !important; word-break: break-word !important;');
+            cells[2].setAttribute('width', '354.05pt');
+          }
+        });
       } else if (table.classList.contains('lkpd-identity-table')) {
         const cols = table.querySelectorAll('col');
         if (cols.length >= 2) {
@@ -154,9 +169,9 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       listStyle = listStyle.replace(/list-style-position\s*:\s*[^;]+;?/gi, '');
 
       const styleType = isOrdered ? 'decimal' : 'disc';
-      const padLeft = isOrdered ? '28pt' : '24pt';
+      const padLeft = isOrdered ? '16pt' : '14pt';
 
-      listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: ${padLeft} !important; margin-left: 0 !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
+      listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: ${padLeft} !important; margin-left: 0pt !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
       list.setAttribute('style', listStyle);
 
       const items = list.querySelectorAll('li');
@@ -165,7 +180,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
         liStyle = liStyle.replace(/padding-left\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/margin-left\s*:\s*[^;]+;?/gi, '');
         liStyle = liStyle.replace(/list-style(-type)?\s*:\s*[^;]+;?/gi, '');
-        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0 !important; padding-left: 0 !important; margin-bottom: 2pt !important; text-align: left !important;`;
+        liStyle += ` list-style-type: ${styleType} !important; margin-left: 0pt !important; padding-left: 0pt !important; margin-bottom: 2pt !important; text-align: left !important;`;
         li.setAttribute('style', liStyle);
       });
     });
@@ -328,50 +343,52 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.signature-table td:first-child, table.signature-table td.col-kepala { width: 50% !important; text-align: left !important; border: none !important; }
                 table.signature-table td:last-child, table.signature-table td.col-guru { width: 50% !important; text-align: left !important; border: none !important; }
                 
-                /* Compact Bullets / Lists (Always visible & clearly indented) */
+                /* Compact Bullets / Lists (Flush left with 0pt indentation) */
                 ul {
                   list-style-type: disc !important;
                   list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 24pt !important;
-                  margin-left: 0 !important;
+                  padding-left: 14pt !important;
+                  margin-left: 0pt !important;
                 }
                 ol {
                   list-style-type: decimal !important;
                   list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 28pt !important;
-                  margin-left: 0 !important;
+                  padding-left: 16pt !important;
+                  margin-left: 0pt !important;
                 }
                 li {
                   list-style-type: inherit !important;
                   margin-bottom: 2pt !important;
-                  padding-left: 2pt !important;
-                  margin-left: 0 !important;
+                  padding-left: 0pt !important;
+                  margin-left: 0pt !important;
                   text-align: left !important;
                   word-wrap: break-word !important;
                 }
                 table ul, td ul, th ul, .lampiran-section ul {
                   list-style-type: disc !important;
                   list-style-position: outside !important;
-                  padding-left: 24pt !important;
-                  margin-left: 0 !important;
+                  padding-left: 14pt !important;
+                  margin-left: 0pt !important;
                 }
                 table ol, td ol, th ol, .lampiran-section ol {
                   list-style-type: decimal !important;
                   list-style-position: outside !important;
-                  padding-left: 28pt !important;
-                  margin-left: 0 !important;
+                  padding-left: 16pt !important;
+                  margin-left: 0pt !important;
                 }
                 ul ul, ol ul {
                   list-style-type: circle !important;
-                  padding-left: 20pt !important;
+                  padding-left: 12pt !important;
+                  margin-left: 0pt !important;
                 }
                 ul ol, ol ol {
                   list-style-type: lower-alpha !important;
-                  padding-left: 22pt !important;
+                  padding-left: 14pt !important;
+                  margin-left: 0pt !important;
                 }
                 p { 
                   margin-top: 0; 
@@ -555,50 +572,52 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 border: none !important;
               }
               
-              /* --- Bullet lists & Numbering (Always visible & clearly indented) --- */
+              /* --- Bullet lists & Numbering (Flush left with 0pt indentation) --- */
               ul {
                 list-style-type: disc !important;
                 list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 24pt !important;
-                margin-left: 0 !important;
+                padding-left: 14pt !important;
+                margin-left: 0pt !important;
               }
               ol {
                 list-style-type: decimal !important;
                 list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 28pt !important;
-                margin-left: 0 !important;
+                padding-left: 16pt !important;
+                margin-left: 0pt !important;
               }
               li {
                 list-style-type: inherit !important;
                 margin-bottom: 2pt !important;
-                padding-left: 2pt !important;
-                margin-left: 0 !important;
+                padding-left: 0pt !important;
+                margin-left: 0pt !important;
                 text-align: left !important;
                 word-wrap: break-word !important;
               }
               table ul, td ul, th ul, .lampiran-section ul {
                 list-style-type: disc !important;
                 list-style-position: outside !important;
-                padding-left: 24pt !important;
-                margin-left: 0 !important;
+                padding-left: 14pt !important;
+                margin-left: 0pt !important;
               }
               table ol, td ol, th ol, .lampiran-section ol {
                 list-style-type: decimal !important;
                 list-style-position: outside !important;
-                padding-left: 28pt !important;
-                margin-left: 0 !important;
+                padding-left: 16pt !important;
+                margin-left: 0pt !important;
               }
               ul ul, ol ul {
                 list-style-type: circle !important;
-                padding-left: 20pt !important;
+                padding-left: 12pt !important;
+                margin-left: 0pt !important;
               }
               ul ol, ol ol {
                 list-style-type: lower-alpha !important;
-                padding-left: 22pt !important;
+                padding-left: 14pt !important;
+                margin-left: 0pt !important;
               }
 
               /* --- Text Formatting Styles --- */
@@ -814,44 +833,46 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 24pt !important;
-            margin-left: 0 !important;
+            padding-left: 14pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area ol {
             list-style-type: decimal !important;
             list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 28pt !important;
-            margin-left: 0 !important;
+            padding-left: 16pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area li {
             list-style-type: inherit !important;
             margin-bottom: 2pt !important;
-            padding-left: 2pt !important;
-            margin-left: 0 !important;
+            padding-left: 0pt !important;
+            margin-left: 0pt !important;
             text-align: left !important;
             word-wrap: break-word !important;
           }
           #printable-area table ul, #printable-area td ul, #printable-area th ul, #printable-area .lampiran-section ul {
             list-style-type: disc !important;
             list-style-position: outside !important;
-            padding-left: 24pt !important;
-            margin-left: 0 !important;
+            padding-left: 14pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area table ol, #printable-area td ol, #printable-area th ol, #printable-area .lampiran-section ol {
             list-style-type: decimal !important;
             list-style-position: outside !important;
-            padding-left: 28pt !important;
-            margin-left: 0 !important;
+            padding-left: 16pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area ul ul, #printable-area ol ul {
             list-style-type: circle !important;
-            padding-left: 20pt !important;
+            padding-left: 12pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area ul ol, #printable-area ol ol {
             list-style-type: lower-alpha !important;
-            padding-left: 22pt !important;
+            padding-left: 14pt !important;
+            margin-left: 0pt !important;
           }
           #printable-area p {
             margin-top: 0;
