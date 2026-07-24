@@ -76,7 +76,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           if (cleanedInner.includes('Mengetahui') || cleanedInner.includes('Kepala')) {
             return `<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">${cleanedInner}</td>`;
           } else if (cleanedInner.includes('Guru Mata Pelajaran') || cleanedInner.includes('Jombang,')) {
-            return `<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">${cleanedInner}</td>`;
+            return `<td class="col-right" style="width: 226.77pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">${cleanedInner}</td>`;
           }
           return tdMatch;
         });
@@ -161,7 +161,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   width: 566.9pt !important;
                 }
                 table.signature-table td.col-right {
-                  width: 170.07pt !important;
+                  width: 226.77pt !important;
                 }
                 p { text-align: justify; text-justify: inter-word; line-height: 1.5; margin-top: 0; margin-bottom: 0.5em; }
                 ul, ol {
@@ -289,7 +289,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 width: 566.9pt !important;
               }
               table.signature-table td.col-right {
-                width: 170.07pt !important;
+                width: 226.77pt !important;
               }
               
               /* --- Text Formatting Styles --- */

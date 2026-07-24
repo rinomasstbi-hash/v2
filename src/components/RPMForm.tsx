@@ -169,138 +169,178 @@ export const RPMForm: React.FC<RPMFormProps> = ({ onSubmit, isLoading }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <InputField id="teacherName" label="Nama Guru" value={formData.teacherName} onChange={handleChange} />
-      {errors.teacherName && <p className="text-red-500 text-sm -mt-6">{errors.teacherName}</p>}
-      <InputField id="teacherNip" label="NIP Guru" type="text" value={formData.teacherNip} onChange={handleChange} />
-      {errors.teacherNip && <p className="text-red-500 text-sm -mt-6">{errors.teacherNip}</p>}
-      
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="className" className="block text-sm font-semibold text-slate-600 mb-1">Kelas</label>
-          <select id="className" name="className" value={formData.className} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-slate-50 text-slate-900 transition">
-            <option>VII</option>
-            <option>VIII</option>
-            <option>IX</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="semester" className="block text-sm font-semibold text-slate-600 mb-1">Semester</label>
-          <select id="semester" name="semester" value={formData.semester} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-slate-50 text-slate-900 transition">
-            <option>I</option>
-            <option>II</option>
-            <option>III</option>
-            <option>IV</option>
-            <option>V</option>
-            <option>VI</option>
-          </select>
-        </div>
-      </div>
+      {/* 2 Bilah (Kiri & Kanan) Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        {/* BILAH KIRI: Identitas Guru & Informasi Kelas */}
+        <div className="space-y-6 bg-slate-50/70 p-6 rounded-xl border border-slate-200/80 shadow-sm">
+          <div className="border-b border-slate-200 pb-3 mb-2 flex items-center gap-2 text-cyan-700 font-bold text-base">
+            <svg className="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            <h3>Bilah 1: Identitas Guru & Kelas</h3>
+          </div>
 
-      <div>
-        <label htmlFor="subject" className="block text-sm font-semibold text-slate-600 mb-1">Mata Pelajaran</label>
-        <select id="subject" name="subject" value={formData.subject} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-slate-50 text-slate-900 transition">
-            {SUBJECTS.map(subject => <option key={subject} value={subject}>{subject}</option>)}
-        </select>
-        {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
-      </div>
+          <div>
+            <InputField id="teacherName" label="Nama Guru" value={formData.teacherName} onChange={handleChange} />
+            {errors.teacherName && <p className="text-red-500 text-sm mt-1">{errors.teacherName}</p>}
+          </div>
 
-      <TextareaField id="learningObjectives" label="Tujuan Pembelajaran" value={formData.learningObjectives} onChange={handleChange} />
-      {errors.learningObjectives && <p className="text-red-500 text-sm -mt-6">{errors.learningObjectives}</p>}
-      <TextareaField id="subjectMatter" label="Materi Pelajaran" value={formData.subjectMatter} onChange={handleChange} />
-      {errors.subjectMatter && <p className="text-red-500 text-sm -mt-6">{errors.subjectMatter}</p>}
+          <div>
+            <InputField id="teacherNip" label="NIP Guru" type="text" value={formData.teacherNip} onChange={handleChange} />
+            {errors.teacherNip && <p className="text-red-500 text-sm mt-1">{errors.teacherNip}</p>}
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="className" className="block text-sm font-semibold text-slate-600 mb-1">Kelas</label>
+              <select id="className" name="className" value={formData.className} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-slate-900 transition">
+                <option>VII</option>
+                <option>VIII</option>
+                <option>IX</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="semester" className="block text-sm font-semibold text-slate-600 mb-1">Semester</label>
+              <select id="semester" name="semester" value={formData.semester} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-slate-900 transition">
+                <option>I</option>
+                <option>II</option>
+                <option>III</option>
+                <option>IV</option>
+                <option>V</option>
+                <option>VI</option>
+              </select>
+            </div>
+          </div>
 
-      <TextareaField 
-        id="studentTarget" 
-        label="Target / Karakteristik Siswa (Opsional)" 
-        value={formData.studentTarget || ''} 
-        onChange={handleChange} 
-        required={false}
-        rows={2}
-        placeholder="Contoh: Siswa kelas IX yang aktif, terbiasa dengan metode belajar kelompok, dan memiliki latar belakang minat visual..."
-        helperText="Biarkan kosong jika ingin AI secara otomatis mendeskripsikan karakteristik umum siswa berdasarkan jenjang kelas."
-      />
+          <div>
+            <label htmlFor="subject" className="block text-sm font-semibold text-slate-600 mb-1">Mata Pelajaran</label>
+            <select id="subject" name="subject" value={formData.subject} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-slate-900 transition">
+                {SUBJECTS.map(subject => <option key={subject} value={subject}>{subject}</option>)}
+            </select>
+            {errors.subject && <p className="text-red-500 text-sm mt-1">{errors.subject}</p>}
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-slate-600 mb-2">Opsi Integrasi Tambahan</label>
-        <div className="space-y-2 rounded-lg bg-slate-50 p-3 border border-slate-200">
-            {Object.values(IntegrationOption).map(option => (
-                <label key={option} className="flex items-center space-x-3 cursor-pointer p-2 rounded-md hover:bg-slate-100 transition-colors">
-                    <input
-                        type="radio"
-                        name="integrationOption"
-                        value={option}
-                        checked={formData.integrationOption === option}
-                        onChange={handleChange}
-                        className="h-4 w-4 text-cyan-600 border-slate-300 focus:ring-cyan-500"
-                    />
-                    <span className="text-sm text-slate-700 font-medium">{option}</span>
-                </label>
-            ))}
-        </div>
-      </div>
+          <div>
+            <label htmlFor="language" className="block text-sm font-semibold text-slate-600 mb-1">Bahasa Pembuka/Penutup</label>
+            <select id="language" name="language" value={formData.language} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-slate-900 transition">
+              <option>Tidak Ada</option>
+              <option>Bahasa Arab</option>
+              <option>Bahasa Inggris</option>
+            </select>
+          </div>
 
-      <div>
-        <label htmlFor="language" className="block text-sm font-semibold text-slate-600 mb-1">Bahasa Pembuka/Penutup</label>
-        <select id="language" name="language" value={formData.language} onChange={handleChange} className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-slate-50 text-slate-900 transition">
-          <option>Tidak Ada</option>
-          <option>Bahasa Arab</option>
-          <option>Bahasa Inggris</option>
-        </select>
-      </div>
-      
-      <InputField 
-        id="meetings" 
-        label="Jumlah Pertemuan" 
-        type="text" 
-        value={formData.meetings || ''} 
-        onChange={handleChange}
-        inputMode="numeric"
-        pattern="[0-9]*"
-        required={false}
-      />
-       {errors.meetings && <p className="text-red-500 text-sm -mt-6">{errors.meetings}</p>}
-      
-      <div>
-        <label className="block text-sm font-semibold text-slate-600 mb-1">Praktik Pedagogis per Pertemuan</label>
-        <div className="space-y-2">
-        {Array.from({ length: formData.meetings }).map((_, index) => (
-            <div key={index} className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-slate-600 w-28 flex-shrink-0">Pertemuan {index + 1}:</span>
-                <select 
+          <div>
+            <InputField 
+              id="meetings" 
+              label="Jumlah Pertemuan" 
+              type="text" 
+              value={formData.meetings || ''} 
+              onChange={handleChange}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              required={false}
+            />
+            {errors.meetings && <p className="text-red-500 text-sm mt-1">{errors.meetings}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-600 mb-1">Praktik Pedagogis per Pertemuan</label>
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              {Array.from({ length: formData.meetings }).map((_, index) => (
+                <div key={index} className="flex items-center space-x-2">
+                  <span className="text-sm font-medium text-slate-600 w-28 flex-shrink-0">Pertemuan {index + 1}:</span>
+                  <select 
                     value={formData.pedagogicalPractices[index] || ''}
                     onChange={(e) => handlePracticeChange(index, e.target.value as PedagogicalPractice)}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-slate-50 text-slate-900 transition"
-                >
+                    className="w-full px-4 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white text-slate-900 transition"
+                  >
                     {PEDAGOGICAL_PRACTICES.map(practice => <option key={practice} value={practice}>{practice}</option>)}
-                </select>
+                  </select>
+                </div>
+              ))}
             </div>
-        ))}
+          </div>
+        </div>
+
+        {/* BILAH KANAN: Materi & Parameter Kurikulum */}
+        <div className="space-y-6 bg-slate-50/70 p-6 rounded-xl border border-slate-200/80 shadow-sm">
+          <div className="border-b border-slate-200 pb-3 mb-2 flex items-center gap-2 text-teal-700 font-bold text-base">
+            <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <h3>Bilah 2: Materi & Parameter Kurikulum</h3>
+          </div>
+
+          <div>
+            <TextareaField id="learningObjectives" label="Tujuan Pembelajaran" value={formData.learningObjectives} onChange={handleChange} rows={3} />
+            {errors.learningObjectives && <p className="text-red-500 text-sm mt-1">{errors.learningObjectives}</p>}
+          </div>
+
+          <div>
+            <TextareaField id="subjectMatter" label="Materi Pelajaran" value={formData.subjectMatter} onChange={handleChange} rows={2} />
+            {errors.subjectMatter && <p className="text-red-500 text-sm mt-1">{errors.subjectMatter}</p>}
+          </div>
+
+          <div>
+            <TextareaField 
+              id="studentTarget" 
+              label="Target / Karakteristik Siswa (Opsional)" 
+              value={formData.studentTarget || ''} 
+              onChange={handleChange} 
+              required={false}
+              rows={2}
+              placeholder="Contoh: Siswa kelas IX yang aktif, terbiasa dengan metode belajar kelompok, dan memiliki latar belakang minat visual..."
+              helperText="Biarkan kosong jika ingin AI secara otomatis mendeskripsikan karakteristik umum siswa berdasarkan jenjang kelas."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-600 mb-2">Opsi Integrasi Tambahan</label>
+            <div className="space-y-2 rounded-lg bg-white p-3 border border-slate-200">
+              {Object.values(IntegrationOption).map(option => (
+                <label key={option} className="flex items-center space-x-3 cursor-pointer p-2 rounded-md hover:bg-slate-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="integrationOption"
+                    value={option}
+                    checked={formData.integrationOption === option}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-cyan-600 border-slate-300 focus:ring-cyan-500"
+                  />
+                  <span className="text-sm text-slate-700 font-medium">{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-600 mb-1">Dimensi Lulusan (Pilih beberapa)</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 bg-white p-3 rounded-lg border border-slate-200">
+              {GRADUATE_DIMENSIONS.map(dim => (
+                <label key={dim} className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-slate-50">
+                  <input 
+                    type="checkbox"
+                    checked={formData.graduateDimensions.includes(dim)}
+                    onChange={() => handleDimensionChange(dim)}
+                    className="h-4 w-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
+                  />
+                  <span className="text-sm text-slate-600">{dim}</span>
+                </label>
+              ))}
+            </div>
+            {errors.graduateDimensions && <p className="text-red-500 text-sm mt-2">{errors.graduateDimensions}</p>}
+          </div>
+
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-slate-600 mb-1">Dimensi Lulusan (Pilih beberapa)</label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-          {GRADUATE_DIMENSIONS.map(dim => (
-            <label key={dim} className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-slate-50">
-              <input 
-                type="checkbox"
-                checked={formData.graduateDimensions.includes(dim)}
-                onChange={() => handleDimensionChange(dim)}
-                className="h-4 w-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
-              />
-              <span className="text-sm text-slate-600">{dim}</span>
-            </label>
-          ))}
-        </div>
-         {errors.graduateDimensions && <p className="text-red-500 text-sm mt-2">{errors.graduateDimensions}</p>}
-      </div>
-
-      <div className="flex flex-col sm:flex-row-reverse gap-3 pt-4">
+      {/* Tombol Aksi Utama */}
+      <div className="flex flex-col sm:flex-row-reverse gap-4 pt-4 border-t border-slate-200">
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-gradient-to-r from-cyan-500 to-teal-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center"
+          className="w-full sm:w-1/2 bg-gradient-to-r from-cyan-500 to-teal-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg hover:shadow-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center text-base"
         >
           {isLoading ? 'Memproses...' : 'Generate RPM'}
         </button>
@@ -308,9 +348,9 @@ export const RPMForm: React.FC<RPMFormProps> = ({ onSubmit, isLoading }) => {
           type="button"
           onClick={handleFillExample}
           disabled={isLoading}
-          className="w-full bg-white text-slate-700 font-bold py-3 px-4 rounded-lg border-2 border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-slate-200 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="w-full sm:w-1/2 bg-white text-slate-700 font-bold py-3.5 px-6 rounded-xl border-2 border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:bg-slate-200 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-base"
         >
-         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-cyan-600" viewBox="0 0 20 20" fill="currentColor">
             <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
             <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
           </svg>

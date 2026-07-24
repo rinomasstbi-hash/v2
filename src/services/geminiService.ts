@@ -223,7 +223,7 @@ function createPrompt(data: RPMInput): string {
     - Tabel tanda tangan menggunakan tag: \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`
     - Memiliki 1 baris (\`<tr>\`) dan 2 kolom (\`<td>\`).
     - **Kolom Kiri:** Lebar 566.9 pt (20 cm) untuk bagian "Mengetahui / Kepala Madrasah". Tag: \`<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">\`
-    - **Kolom Kanan:** Lebar 170.07 pt (6 cm) untuk bagian penulisan tanggal dan "Guru Mata Pelajaran". Tag: \`<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">\`
+    - **Kolom Kanan:** Lebar 226.77 pt (8 cm) untuk bagian penulisan tanggal dan "Guru Mata Pelajaran". Tag: \`<td class="col-right" style="width: 226.77pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">\`
     - **Perataan Teks:** Semua teks dalam tabel tanda tangan HARUS **rata kiri** (\`text-align: left;\`).
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
@@ -281,7 +281,7 @@ function createPrompt(data: RPMInput): string {
 
     2.  **Tanda Tangan:** Setelah tabel utama, buatlah sebuah tabel baru untuk bagian tanda tangan dengan gaya \`<table class="signature-table" style="width: 100%; table-layout: fixed; border-collapse: collapse; border: none; text-align: left; margin-top: 0;">\`. PASTIKAN TIDAK ADA MARGIN SEBELUM ATAU SESUDAH TABEL INI. Tabel ini harus memiliki satu baris (\`<tr>\`) dan dua kolom (\`<td>\`). Semua teks di dalamnya rata kiri (\`text-align: left\`).
         - Kolom kiri (lebar 566.9 pt / 20 cm): \`<td class="col-left" style="width: 566.9pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Mengetahui,<br/>Kepala MTsN 4 Jombang<br/><br/><br/><br/><b>Dr. Aziz Ja'far, S.Th.I., M.Pd.I</b><br/>NIP. 197610062007101008</td>\`
-        - Kolom kanan (lebar 170.07 pt / 6 cm): \`<td class="col-right" style="width: 170.07pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
+        - Kolom kanan (lebar 226.77 pt / 8 cm): \`<td class="col-right" style="width: 226.77pt; border: none; line-height: 1.2; text-align: left; vertical-align: top; padding: 0;">Jombang, [Generate tanggal hari ini format DD MMMM YYYY]<br/>Guru Mata Pelajaran<br/><br/><br/><br/><b>${teacherName}</b><br/>NIP. ${teacherNip}</td>\`
 
     3.  **LAMPIRAN:** Gunakan \`<br class="page-break" /><h2 style="text-align: center; font-size: 36px; font-weight: bold;">LAMPIRAN-LAMPIRAN</h2>\` untuk memulai di halaman baru.
         ${lkpdInstructions}
