@@ -151,34 +151,34 @@ function createPrompt(data: RPMInput): string {
             <colgroup>
               <col style="width: 22.68pt;" />
               <col style="width: 100.63pt;" />
-              <col style="width: 357.69pt;" />
+              <col style="width: 354.05pt;" />
             </colgroup>
             <thead>
               <tr style="background-color: #f2f2f2;">
                 <th style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center;">No</th>
                 <th style="border: 1px solid #000; padding: 8px; width: 100.63pt; text-align: left;">Tahapan Sintaks (${practice})</th>
-                <th style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
+                <th style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left;">Kegiatan & Tugas Peserta Didik</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">1</td>
                 <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">1. Memahami (Pemahaman Konsep)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
                   Sajikan ringkasan materi/konsep kunci yang relevan untuk pertemuan ini + 2-3 pertanyaan pemahaman dasar beserta tempat/ruang jawaban siswa.
                 </td>
               </tr>
               <tr>
                 <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">2</td>
                 <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">2. Mengaplikasikan (Aktivitas Utama Sintaks ${practice})</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
                   Berikan 1 tugas utama, studi kasus, atau langkah eksperimen/proyek yang mencerminkan sintaks <b>${practice}</b> secara nyata, dengan instruksi pengerjaan rinci dan ruang lembar pengerjaan siswa.
                 </td>
               </tr>
               <tr>
                 <td style="border: 1px solid #000; padding: 8px; width: 22.68pt; text-align: center; vertical-align: top;">3</td>
                 <td style="border: 1px solid #000; padding: 8px; width: 100.63pt; font-weight: bold; vertical-align: top; text-align: left;">3. Merefleksikan (Refleksi & Diskusi)</td>
-                <td style="border: 1px solid #000; padding: 8px; width: 357.69pt; text-align: left; vertical-align: top;">
+                <td style="border: 1px solid #000; padding: 8px; width: 354.05pt; text-align: left; vertical-align: top;">
                   Berikan 2-3 pertanyaan refleksi mendalam mengenai pengalaman belajar siswa dengan metode <b>${practice}</b> pada pertemuan ini.
                 </td>
               </tr>

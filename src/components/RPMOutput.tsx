@@ -97,14 +97,14 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
           cols[0].setAttribute('width', '22.68pt');
           cols[1].setAttribute('style', 'width: 100.63pt !important;'); // 3.55 cm
           cols[1].setAttribute('width', '100.63pt');
-          cols[2].setAttribute('style', 'width: 357.69pt !important;'); // Sisa s/d Total 481 pt
-          cols[2].setAttribute('width', '357.69pt');
+          cols[2].setAttribute('style', 'width: 354.05pt !important;'); // 12.49 cm
+          cols[2].setAttribute('width', '354.05pt');
         }
         const headersOrCells = table.querySelectorAll('tr:first-child > th, tr:first-child > td');
         if (headersOrCells.length >= 3) {
           headersOrCells[0].setAttribute('style', (headersOrCells[0].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 22.68pt !important;');
           headersOrCells[1].setAttribute('style', (headersOrCells[1].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 100.63pt !important;');
-          headersOrCells[2].setAttribute('style', (headersOrCells[2].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 357.69pt !important;');
+          headersOrCells[2].setAttribute('style', (headersOrCells[2].getAttribute('style') || '').replace(/width\s*:\s*[^;]+;?/gi, '') + ' width: 354.05pt !important;');
         }
       } else if (table.classList.contains('lkpd-identity-table')) {
         const cols = table.querySelectorAll('col');
@@ -154,7 +154,7 @@ const normalizeRpmTablesAndLists = (rawHtml: string): string => {
       listStyle = listStyle.replace(/list-style-position\s*:\s*[^;]+;?/gi, '');
 
       const styleType = isOrdered ? 'decimal' : 'disc';
-      const padLeft = isOrdered ? '20pt' : '18pt';
+      const padLeft = isOrdered ? '28pt' : '24pt';
 
       listStyle += ` list-style-type: ${styleType} !important; list-style-position: outside !important; padding-left: ${padLeft} !important; margin-left: 0 !important; margin-top: 2pt !important; margin-bottom: 4pt !important;`;
       list.setAttribute('style', listStyle);
@@ -304,7 +304,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.lkpd-activity-table td:nth-child(2) { width: 100.63pt !important; text-align: left !important; }
                 table.lkpd-activity-table col:nth-child(3),
                 table.lkpd-activity-table th:nth-child(3),
-                table.lkpd-activity-table td:nth-child(3) { width: 357.69pt !important; text-align: left !important; }
+                table.lkpd-activity-table td:nth-child(3) { width: 354.05pt !important; text-align: left !important; }
 
                 /* Signature Table Centering & Width */
                 table.signature-table { 
@@ -328,13 +328,13 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 table.signature-table td:first-child, table.signature-table td.col-kepala { width: 50% !important; text-align: left !important; border: none !important; }
                 table.signature-table td:last-child, table.signature-table td.col-guru { width: 50% !important; text-align: left !important; border: none !important; }
                 
-                /* Compact Bullets / Lists (Always visible, flush with left margin) */
+                /* Compact Bullets / Lists (Always visible & clearly indented) */
                 ul {
                   list-style-type: disc !important;
                   list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 18pt !important;
+                  padding-left: 24pt !important;
                   margin-left: 0 !important;
                 }
                 ol {
@@ -342,28 +342,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                   list-style-position: outside !important;
                   margin-top: 2pt !important;
                   margin-bottom: 4pt !important;
-                  padding-left: 20pt !important;
+                  padding-left: 28pt !important;
                   margin-left: 0 !important;
                 }
                 li {
                   list-style-type: inherit !important;
                   margin-bottom: 2pt !important;
-                  padding-left: 0 !important;
+                  padding-left: 2pt !important;
                   margin-left: 0 !important;
                   text-align: left !important;
                   word-wrap: break-word !important;
                 }
-                table ul, td ul, th ul {
+                table ul, td ul, th ul, .lampiran-section ul {
                   list-style-type: disc !important;
                   list-style-position: outside !important;
-                  padding-left: 18pt !important;
+                  padding-left: 24pt !important;
                   margin-left: 0 !important;
                 }
-                table ol, td ol, th ol {
+                table ol, td ol, th ol, .lampiran-section ol {
                   list-style-type: decimal !important;
                   list-style-position: outside !important;
-                  padding-left: 20pt !important;
+                  padding-left: 28pt !important;
                   margin-left: 0 !important;
+                }
+                ul ul, ol ul {
+                  list-style-type: circle !important;
+                  padding-left: 20pt !important;
+                }
+                ul ol, ol ol {
+                  list-style-type: lower-alpha !important;
+                  padding-left: 22pt !important;
                 }
                 p { 
                   margin-top: 0; 
@@ -513,7 +521,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               table.lkpd-activity-table col:nth-child(3),
               table.lkpd-activity-table th:nth-child(3),
               table.lkpd-activity-table td:nth-child(3) {
-                width: 357.69pt !important;
+                width: 354.05pt !important;
                 text-align: left !important;
               }
 
@@ -547,13 +555,13 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 border: none !important;
               }
               
-              /* --- Bullet lists & Numbering (Always visible, compact, no deep tab indentation) --- */
+              /* --- Bullet lists & Numbering (Always visible & clearly indented) --- */
               ul {
                 list-style-type: disc !important;
                 list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 18pt !important;
+                padding-left: 24pt !important;
                 margin-left: 0 !important;
               }
               ol {
@@ -561,28 +569,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
                 list-style-position: outside !important;
                 margin-top: 2pt !important;
                 margin-bottom: 4pt !important;
-                padding-left: 20pt !important;
+                padding-left: 28pt !important;
                 margin-left: 0 !important;
               }
               li {
                 list-style-type: inherit !important;
                 margin-bottom: 2pt !important;
-                padding-left: 0 !important;
+                padding-left: 2pt !important;
                 margin-left: 0 !important;
                 text-align: left !important;
                 word-wrap: break-word !important;
               }
-              table ul, td ul, th ul {
+              table ul, td ul, th ul, .lampiran-section ul {
                 list-style-type: disc !important;
                 list-style-position: outside !important;
-                padding-left: 18pt !important;
+                padding-left: 24pt !important;
                 margin-left: 0 !important;
               }
-              table ol, td ol, th ol {
+              table ol, td ol, th ol, .lampiran-section ol {
                 list-style-type: decimal !important;
                 list-style-position: outside !important;
-                padding-left: 20pt !important;
+                padding-left: 28pt !important;
                 margin-left: 0 !important;
+              }
+              ul ul, ol ul {
+                list-style-type: circle !important;
+                padding-left: 20pt !important;
+              }
+              ul ol, ol ol {
+                list-style-type: lower-alpha !important;
+                padding-left: 22pt !important;
               }
 
               /* --- Text Formatting Styles --- */
@@ -770,7 +786,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           #printable-area table.lkpd-activity-table td:nth-child(2) { width: 100.63pt !important; text-align: left !important; }
           #printable-area table.lkpd-activity-table col:nth-child(3),
           #printable-area table.lkpd-activity-table th:nth-child(3),
-          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 357.69pt !important; text-align: left !important; }
+          #printable-area table.lkpd-activity-table td:nth-child(3) { width: 354.05pt !important; text-align: left !important; }
 
           #printable-area table.signature-table {
             table-layout: fixed !important;
@@ -798,7 +814,7 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 18pt !important;
+            padding-left: 24pt !important;
             margin-left: 0 !important;
           }
           #printable-area ol {
@@ -806,28 +822,36 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
             list-style-position: outside !important;
             margin-top: 2pt !important;
             margin-bottom: 4pt !important;
-            padding-left: 20pt !important;
+            padding-left: 28pt !important;
             margin-left: 0 !important;
           }
           #printable-area li {
             list-style-type: inherit !important;
             margin-bottom: 2pt !important;
-            padding-left: 0 !important;
+            padding-left: 2pt !important;
             margin-left: 0 !important;
             text-align: left !important;
             word-wrap: break-word !important;
           }
-          #printable-area table ul, #printable-area td ul, #printable-area th ul {
+          #printable-area table ul, #printable-area td ul, #printable-area th ul, #printable-area .lampiran-section ul {
             list-style-type: disc !important;
             list-style-position: outside !important;
-            padding-left: 18pt !important;
+            padding-left: 24pt !important;
             margin-left: 0 !important;
           }
-          #printable-area table ol, #printable-area td ol, #printable-area th ol {
+          #printable-area table ol, #printable-area td ol, #printable-area th ol, #printable-area .lampiran-section ol {
             list-style-type: decimal !important;
             list-style-position: outside !important;
-            padding-left: 20pt !important;
+            padding-left: 28pt !important;
             margin-left: 0 !important;
+          }
+          #printable-area ul ul, #printable-area ol ul {
+            list-style-type: circle !important;
+            padding-left: 20pt !important;
+          }
+          #printable-area ul ol, #printable-area ol ol {
+            list-style-type: lower-alpha !important;
+            padding-left: 22pt !important;
           }
           #printable-area p {
             margin-top: 0;
