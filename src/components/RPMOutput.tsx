@@ -104,9 +104,19 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
           <head>
             <meta charset="UTF-8">
             <style>
-                body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; color: #000 !important; }
+                @page {
+                  size: A4 portrait;
+                  margin: 2.0cm 2.0cm 2.0cm 2.0cm;
+                }
+                body { 
+                  font-family: 'Times New Roman', Times, serif; 
+                  font-size: 12pt; 
+                  color: #000 !important; 
+                  line-height: 1.5;
+                }
                 table { border-collapse: collapse; width: 100%; }
-                td, th { vertical-align: top; padding: 8px; }
+                td, th { vertical-align: top; padding: 8px; text-align: justify; text-justify: inter-word; }
+                p, li { text-align: justify; text-justify: inter-word; line-height: 1.5; }
                 .page-break { page-break-before: always; }
             </style>
           </head>
@@ -157,23 +167,60 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
         <head>
           <meta charset="utf-8">
           <title>Dokumen RPM</title>
+          <!--[if gte mso 9]>
+          <xml>
+            <w:WordDocument>
+              <w:View>Print</w:View>
+              <w:Zoom>100</w:Zoom>
+              <w:DoNotOptimizeForBrowser/>
+            </w:WordDocument>
+          </xml>
+          <![endif]-->
           <style>
+              /* --- Page & Margin Setup --- */
+              @page {
+                size: 210mm 297mm; /* Ukuran Kertas: A4 */
+                margin: 2.0cm 2.0cm 2.0cm 2.0cm; /* Atas: 2.0cm, Bawah: 2.0cm, Kiri: 2.0cm, Kanan: 2.0cm */
+                mso-header-margin: 36.0pt;
+                mso-footer-margin: 36.0pt;
+                mso-paper-source: 0;
+              }
+              @page Section1 {
+                size: 210mm 297mm; /* Ukuran Kertas: A4 */
+                mso-page-orientation: portrait; /* Orientasi: Portrait */
+                margin: 2.0cm 2.0cm 2.0cm 2.0cm; /* Atas: 2.0 cm, Bawah: 2.0 cm, Kiri: 2.0 cm, Kanan: 2.0 cm */
+              }
+              div.Section1 {
+                page: Section1;
+              }
+
               /* --- General Styles --- */
-              body { font-family: 'Times New Roman', Times, serif; font-size: 12pt; }
+              body { 
+                font-family: 'Times New Roman', Times, serif; 
+                font-size: 12pt; 
+                line-height: 1.5; 
+              }
               br.page-break { page-break-before: always; }
               
               /* --- Table Styles --- */
               table { border-collapse: collapse; width: 100%; }
-              td, th { vertical-align: top; padding: 8px; border: 1px solid #000; }
+              td, th { 
+                vertical-align: top; 
+                padding: 8px; 
+                border: 1px solid #000; 
+                text-align: justify; /* Rata kanan-kiri */
+                text-justify: inter-word;
+              }
               
               /* --- Text Formatting Styles --- */
               p { 
                 margin-top: 0; 
-                margin-bottom: 0.5em; /* Spasi yang konsisten setelah paragraf */
-                text-align: left; /* Default alignment is left */
-                line-height: 1.5; /* Keterbacaan yang lebih baik */
+                margin-bottom: 0.5em; 
+                text-align: justify; /* Rata kanan-kiri untuk paragraf */
+                text-justify: inter-word;
+                line-height: 1.5; 
               }
-              h2, h3, h4, h5, h6 {
+              h1, h2, h3, h4, h5, h6 {
                 margin-top: 1.2em;
                 margin-bottom: 0.6em;
                 line-height: 1.2;
@@ -181,15 +228,20 @@ export const RPMOutput: React.FC<RPMOutputProps> = ({ htmlContent, isGenerating,
               ul, ol {
                 margin-top: 0;
                 margin-bottom: 0.5em;
-                padding-left: 40px; /* Indentasi standar untuk daftar */
+                padding-left: 40px; 
               }
               li {
-                margin-bottom: 0.2em; /* Spasi antar item daftar yang lebih rapat */
-                text-align: left; /* Default alignment is left */
+                margin-bottom: 0.2em; 
+                text-align: justify; /* Rata kanan-kiri untuk daftar */
+                text-justify: inter-word;
               }
           </style>
         </head>
-        <body>${contentForDoc}</body>
+        <body>
+          <div class="Section1">
+            ${contentForDoc}
+          </div>
+        </body>
       </html>
     `;
     

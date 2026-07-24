@@ -214,7 +214,7 @@ function createPrompt(data: RPMInput): string {
     ${kbcInstruction}
     ${integrationPrompt}
 
-    **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf di dalam kolom "Isi" pada tabel RPM utama, Anda HARUS menerapkan gaya rata kanan-kiri (\`style="text-align: justify;"\`). Namun, untuk SEMUA konten di dalam bagian LAMPIRAN (termasuk LKPD dan Asesmen), gunakan perataan teks kiri standar (JANGAN tambahkan gaya \`text-align\`).
+    **ATURAN GAYA PENTING (PERATAAN TEKS):** Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar maupun seluruh bagian LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
