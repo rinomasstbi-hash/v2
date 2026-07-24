@@ -280,12 +280,22 @@ function createPrompt(data: RPMInput): string {
     - Untuk semua teks paragraf, daftar (list), dan konten di dalam tabel Pengalaman Belajar (Tabel RPM Utama), Anda dapat menerapkan gaya perataan rata kanan-kiri (\`style="text-align: justify;"\`).
     - NAMUN, UNTUK SELURUH BAGIAN LAMPIRAN (termasuk LKPD dan Instrumen Asesmen), Anda HARUS menggunakan perataan TEKS KIRI STANDAR (\`style="text-align: left;"\`) dan DILARANG KERAS menggunakan justify.
 
-    **ATURAN UKURAN TABEL & LEBAR KERTAS (SANGAT PENTING):**
-    - Seluruh tabel yang Anda buat (Tabel RPM Utama, Tabel Tanda Tangan, Tabel LKPD, dan Tabel Asesmen) HARUS disetel dengan \`style="width: 100%; table-layout: fixed; word-wrap: break-word; overflow-wrap: break-word;"\`.
-    - DILARANG KERAS menentukan lebar kolom dalam angka 'pt' atau 'px' absolut yang besar (seperti 450pt atau 500px) yang menyebabkan tabel melebar dan melebihi batas margin kertas A4. Gunakan persentase (%) yang seimbang, KECUALI untuk tabel LKPD berikut:
-    - **PENTING KHUSUS TABEL LKPD:**
-      1. Pada Tabel LKPD Tahapan Pedagogis (Aktivitas Utama LKPD), kolom kanan ("Kegiatan & Tugas Peserta Didik") HARUS disetel dengan lebar fixed **12,48 cm** atau **353,76pt** (\`style="width: 353.76pt;"\` atau \`width: 12.48cm;\`), dengan kolom 1 (No: 30pt) dan kolom 2 (Tahapan Sintaks: 97.24pt) sehingga total lebar pas 481pt.
-      2. Pada Tabel Ceklis Penilaian Diri (LKPD), lebar kolom dan tabel HARUS disetel **481pt** (\`style="width: 481pt;"\`).
+    **ATURAN POSISI & UKURAN TABEL (PASTI CENTER & KANAN-KIRI SEIMBANG):**
+    - Seluruh tabel yang Anda buat (Tabel RPM Utama, Tabel Tanda Tangan, Tabel LKPD, dan Tabel Asesmen) HARUS diposisikan TEPAT DI TENGAH DOKUMEN dengan menambahkan gaya \`margin-left: auto; margin-right: auto;\` pada tag \`<table>\`.
+    - Atribut utama setiap tabel wajib disetel: \`style="width: 481pt; max-width: 481pt; margin-left: auto; margin-right: auto; table-layout: fixed; border-collapse: collapse; word-wrap: break-word; overflow-wrap: break-word;"\`.
+    - DILARANG KERAS membuat tabel atau menentukan lebar kolom yang totalnya melebihi **481pt** (lebar maksimal area cetak A4 margin 2cm).
+    
+    **ATURAN KHUSUS SELURUH TABEL LKPD & ASESMEN (FIXED 481pt):**
+    - Setiap tabel di LKPD dan Lampiran (Tabel Identitas, Tabel Aktivitas Pedagogis, Tabel Ceklis Penilaian Diri, Rubrik Penilaian, dan Tabel Asesmen) HARUS menggunakan lebar FIXED **481pt** (\`style="width: 481pt; max-width: 481pt; margin-left: auto; margin-right: auto; table-layout: fixed;"\`).
+    - Pada Tabel LKPD Tahapan Pedagogis (3 kolom):
+      1. Kolom 1 (No): \`width: 30pt;\`
+      2. Kolom 2 (Tahapan Sintaks): \`width: 97.24pt;\`
+      3. Kolom 3 (Kegiatan & Tugas): \`width: 353.76pt;\` (Total = 30 + 97.24 + 353.76 = tepat 481pt).
+    - Pada Tabel LKPD Identitas, Ceklis, Rubrik, dan Asesmen lainnya, pastikan total penjumlahan seluruh lebar kolom (persentase atau pt) selalu tepat 481pt (100%).
+
+    **ATURAN DAFTAR BULLET/POIN DI DALAM TABEL (SANGAT PENTING):**
+    - Setiap kali membuat daftar poin (\`<ul><li>\` atau \`<ol><li>\`) DI DALAM SEL TABEL, HARUS diberi gaya \`style="padding-left: 16pt; margin-left: 0; margin-top: 2pt; margin-bottom: 2pt;"\`.
+    - DILARANG KERAS membiarkan padding bawaan yang besar (seperti 40px/2.5em) karena akan membuat poin bullets menjorok/tab terlalu jauh ke kanan. Poin bullets harus sejajar dan rapat dengan isi tabel.
 
     **ATURAN PEMISAH HALAMAN (SANGAT PENTING):**
     Untuk memulai halaman baru, sisipkan tag **hanya-satu** \`<br class="page-break" />\` TEPAT SEBELUM elemen judul (\`<h2>\` atau \`<h3>\`) dari setiap bagian yang harus memulai halaman baru. Ini berlaku untuk judul utama "Lampiran" dan untuk setiap sub-lampiran (misalnya, "Lampiran 1", "Lampiran 2", "Instrumen Asesmen").
